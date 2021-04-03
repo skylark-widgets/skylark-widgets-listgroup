@@ -316,14 +316,15 @@
 
     <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
     <script>
-        var initPage = function($) {
-            $('.lark-listing.cascade.multiExpand').plugin("domx.lists.cascadable",{
+        var initPage = function(langx,domx) {
+            var $ = domx.query;
+            $('.lark-listing.cascade.multiExpand').plugin("domx.plugins.lists.cascadable",{
               "multitier" : {
                 "mode" : "cascade",
                 "multiExpand" : true
               }                
             });
-            $('.lark-listing.cascade.noMultiExpand').plugin("domx.lists.cascadable",{
+            $('.lark-listing.cascade.noMultiExpand').plugin("domx.plugins.lists.cascadable",{
               "multitier" : {
                 "mode" : "cascade",
                 "multiExpand" : false

@@ -178,8 +178,9 @@
 
     <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
     <script>
-        var initPage = function($) {
-            $('.lark-listing.tree').plugin("domx.lists.tree",{
+        var initPage = function(langx,domx) {
+          var $ = domx.query;
+            $('.lark-listing.tree').plugin("domx.plugins.lists.tree",{
               "multitier" : {
                 "mode" : "tree"
               }                
