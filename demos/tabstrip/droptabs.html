@@ -42,7 +42,8 @@
 	<script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
 
 	<script type="text/javascript">
-    	function initPage($) {
+        var initPage = function(langx,domx) {
+            var $ = domx.query;
         	var plugin = $('.tabstrip').plugin("domx.tabstrip");
 
         	plugin.arrange();

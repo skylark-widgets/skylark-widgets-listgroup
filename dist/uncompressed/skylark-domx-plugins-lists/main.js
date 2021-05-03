@@ -1,11 +1,11 @@
 define([
     "./lists",
-    "./Foldable",
-    "./Cascadable",
-    "./Group",
-    "./Slidable",
-    "./Tiler",
-    "./Tree"
+    "./foldable",
+    "./cascadable",
+    "./group",
+    "./slidable",
+    "./tiler",
+    "./tree"
 ], function(lists) {
     return lists;
 });

@@ -7,14 +7,15 @@
   "./multitier_list"
 ],function(langx,$,elmx,plugins,lists,_MultitierList){
 
-  var Foldable = _MultitierList.inherit({
-    klassName : "Foldable",
 
-    pluginName : "domx.plugins.lists.foldable"
+  var CoverFlow = _MultitierList.inherit({
+    klassName : "CoverFlow",
 
+    pluginName : "domx.plugins.lists.coverflow"
   });
 
-  plugins.register(Foldable);
 
-  return lists.Foldable = Foldable;
+  plugins.register(CoverFlow);
+
+  return lists.CoverFlow = CoverFlow;	
 });

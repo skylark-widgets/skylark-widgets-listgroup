@@ -5,5 +5,5 @@
  * @link https://github.com/skylark-domx/skylark-domx-plugins-lists/
  * @license MIT
  */
-define(["skylark-langx/langx","skylark-domx-query","skylark-domx-velm","skylark-domx-plugins","./lists","./_MultitierList"],function(l,e,s,a,i,r){var n=r.inherit({klassName:"Foldable",pluginName:"domx.plugins.lists.foldable"});return a.register(n),i.Foldable=n});
-//# sourceMappingURL=sourcemaps/Foldable.js.map
+define(["skylark-langx/langx","skylark-domx-query","skylark-domx-velm","skylark-domx-plugins","./lists","./multitier_list"],function(l,e,s,a,i,r){var n=r.inherit({klassName:"Foldable",pluginName:"domx.plugins.lists.foldable"});return a.register(n),i.Foldable=n});
+//# sourceMappingURL=sourcemaps/foldable.js.map

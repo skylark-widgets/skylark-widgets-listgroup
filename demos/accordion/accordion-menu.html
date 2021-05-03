@@ -316,13 +316,14 @@
 
     <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
     <script>
-        var initPage = function($) {
-            $('.lark-listing.accordion.multiExpand').plugin("domx.lists.foldable",{
+        var initPage = function(langx,domx) {
+            var $ = domx.query;
+            $('.lark-listing.accordion.multiExpand').plugin("domx.plugins.lists.foldable",{
               "multitier" : {
                 "multiExpand" : true
               }                
             });
-            $('.lark-listing.accordion.noMultiExpand').plugin("domx.lists.foldable",{
+            $('.lark-listing.accordion.noMultiExpand').plugin("domx.plugins.lists.foldable",{
               "multitier" : {
                 "multiExpand" : false
               }                

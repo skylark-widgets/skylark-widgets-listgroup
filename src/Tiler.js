@@ -4,7 +4,7 @@
   "skylark-domx-velm",
   "skylark-domx-plugins",
   "./lists",
-  "./Group"
+  "./group"
 ],function(langx,$,elmx,plugins,lists,Group){
 
 

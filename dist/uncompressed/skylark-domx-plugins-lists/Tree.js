@@ -4,7 +4,7 @@
   "skylark-domx-velm",
   "skylark-domx-plugins",
   "./lists",
-  "./_MultitierList"
+  "./multitier_list"
 ],function(langx,$,elmx,plugins,lists,_MultitierList){
 
 

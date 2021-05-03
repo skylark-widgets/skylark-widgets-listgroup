@@ -179,7 +179,8 @@
 <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
 
 <script>
-    function initPage($) {
+    var initPage = function(langx,domx) {
+        var $ = domx.query;
         $('.tabstrip').plugin("lark.tabstrip");
     }
 </script>
