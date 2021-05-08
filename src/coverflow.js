@@ -2,7 +2,7 @@
   "skylark-langx/langx",
   "skylark-domx-query",
   "skylark-domx-velm",
-  "skylark-domx-plugins",
+  "skylark-domx-plugins-base",
   "./lists",
   "./multitier_list"
 ],function(langx,$,elmx,plugins,lists,_MultitierList){

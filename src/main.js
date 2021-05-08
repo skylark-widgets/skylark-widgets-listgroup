@@ -4,6 +4,7 @@ define([
     "./cascadable",
     "./group",
     "./slidable",
+    "./sortable",
     "./tiler",
     "./tree"
 ], function(lists) {

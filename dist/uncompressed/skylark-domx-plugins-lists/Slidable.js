@@ -5,7 +5,7 @@ define([
   'skylark-domx-styler',
   'skylark-domx-eventer',
   'skylark-domx-query',
-  'skylark-domx-plugins',
+  "skylark-domx-plugins-base",
   "skylark-devices-points/touch",
   "./lists"
 ], function (langx,browser, noder, styler, eventer, $,plugins,touch,lists) {
