@@ -1,1 +1,0 @@
-{"version":3,"sources":["lists.js"],"names":["define","skylark","attach"],"mappings":";;;;;;;AAAAA,QACC,yBACC,SAASC,GACV,OAAOA,EAAQC,OAAO","file":"../lists.js","sourcesContent":["define([\r\n\t\"skylark-langx/skylark\"\r\n],function(skylark){\r\n\treturn skylark.attach(\"domx.plugins.lists\",{});\r\n});"]}

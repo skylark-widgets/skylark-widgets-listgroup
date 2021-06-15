@@ -1,5 +1,5 @@
 {
-  "name": "skylark-domx-plugins-lists",
+  "name": "skylark-domx-plugins-groups",
   "description": "The skylark list plugin library.",
   "version": "0.9.0",
   "keywords": [
@@ -8,17 +8,17 @@
     "swt",
     "widget"
   ],
-  "homepage": "https://github.com/skylark-domx/skylark-domx-plugins-lists/",
+  "homepage": "https://github.com/skylark-domx/skylark-domx-plugins-groups/",
   "author": "Hudaokeji, Inc.",
   "scripts": {
     "build": "slib build ."
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/skylark-widgets/skylark-domx-plugins-lists.git"
+    "url": "https://github.com/skylark-widgets/skylark-domx-plugins-groups.git"
   },
   "bugs": {
-    "url": "https://github.com/skylark-widgets/skylark-domx-plugins-lists/issues"
+    "url": "https://github.com/skylark-widgets/skylark-domx-plugins-groups/issues"
   },
   "license": "MIT",
   "dependencies": {
