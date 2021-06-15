@@ -1907,10 +1907,10 @@ define('skylark-domx-plugins-groups/sortable',[
 
         lists.multitier(elm,langx.mixin({
           hide : function($el) {
-
+            $el.plugin("lark.toggles.collapse").hide();
           },
           toggle : function($el) {
-
+            $el.plugin("lark.toggles.collapse").toggle();
           }
         },this.options));
     }
