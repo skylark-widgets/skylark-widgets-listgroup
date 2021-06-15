@@ -44,7 +44,7 @@ define([
     var Sortable = plugins.Plugin.inherit({
         klassName: "Sortable",
 
-        pluginName : "lark.sortable",
+        pluginName : "lark.groups.sortable",
         
         options : {
             connectWith: false,

@@ -134,8 +134,9 @@
 </div>
 <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
 <script>
-    var initPage = function ($) {
-        var pag = $('#tree1').plugin("domx.groups.tree",{
+      var initPage = function(langx,domx) {
+        var $ = domx.query;
+        var pag = $('#tree1').plugin("lark.groups.tree",{
           "multiTier" : {
             "mode" : "tree"
           }

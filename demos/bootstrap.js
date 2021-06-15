@@ -171,6 +171,11 @@ requirejs.config({
             main: 'main'
          },
          {
+           name : "skylark-domx-lists",
+           location : "../node_modules/skylark-domx-lists/dist/uncompressed/skylark-domx-lists",
+            main: 'main'
+         },
+         {
            name : "skylark-domx-noder",
            location : "../node_modules/skylark-domx-noder/dist/uncompressed/skylark-domx-noder",
             main: 'main'

@@ -11,7 +11,7 @@
   var Tiler = Group.inherit({
     klassName : "Tiler",
 
-    pluginName : "domx.plugins.groups.tiler",
+    pluginName : "lark.groups.tiler",
 
     options: {
         alignment: 'left',

@@ -102,15 +102,11 @@ define('skylark-domx-plugins-groups/groups',[
     var Group = plugins.Plugin.inherit({
         klassName : "Group",
 
-        pluginName : "domx.plugins.groups.group",
+        pluginName : "lark.groups.group",
 
         options : {
-        	multiSelect: false,
-
         	classes : {
-          	active : "active"
         	},
-
 
         	selectors : {
           	item : "li",                   // ".list-group-item"
@@ -118,7 +114,14 @@ define('skylark-domx-plugins-groups/groups',[
 
           item : {
             template : "<span><i class=\"glyphicon\"></i><a href=\"javascript: void(0);\"></a> </span>",
-            checkable : false,
+
+            selectable: true,
+            multiSelect: false,
+
+            classes : {
+              selected : "active"
+            },
+
             selectors : {
               icon : " > span > i",
               text : " > span > a"
@@ -128,10 +131,8 @@ define('skylark-domx-plugins-groups/groups',[
         	selected : 0
         },
 
-        state : {
-          selected : Object
-        },
-
+        selected : null,
+ 
         _construct : function(elm,options) {
             this.overrided(elm,options);
             var self = this,
@@ -143,50 +144,76 @@ define('skylark-domx-plugins-groups/groups',[
             velm.on('click', itemSelector, function () {
                 var veItem = elmx(this);
 
-                if (!veItem.hasClass('disabled')) {
-                  var value = veItem.data("value");
-                  if (value === undefined) {
-                    value = self._$items.index(this);
-                  }
-                  self.selected = value;
+                if (self.options.item.selectable && !veItem.hasClass('disabled')) {
+                    let value = self.getItemValue(this);
+                    if (self.options.item.multiSelect) {
+                      self.toggleSelectOneItem(value);
+                    } else {
+                      self.clearSelectedItems();
+                      self.selectOneItem(value);
+                    }
                 }
 
                 //veItem.blur();
                 return false;
             });
-            this.selected = this.options.selected;
 
+            if (this.options.item.multiSelect) {
+              this.selected = [];
+            } else {
+              this.selected = null;
+            }
+            ///this.selected = this.options.selected;
+        },
+        
+        findItem : function (valueOrIdx) {
+          var $item;
+          if (langx.isNumber(valueOrIdx)) {
+            $item = this._$items.eq(valueOrIdx);
+          } else {
+            $item = this._$items.filter('[data-value="' + valueOrIdx + '"]');
+          }
+          return $item;
         },
 
-        _refresh : function(updates) {
-          this.overrided(updates);
-          var self  = this;
+        getItemValue : function(elm) {
+          let $item = $(elm),
+              value = $item.data("value");
+          if (value === undefined) {
+            value = this._$items.index($item[0]);
+          }
+          return value;
+        },
 
-          function findItem(valueOrIdx) {
-            var $item;
-            if (langx.isNumber(valueOrIdx)) {
-              $item = self._$items.eq(valueOrIdx);
-            } else {
-              $item = self._$items.filter('[data-value="' + valueOrIdx + '"]');
-            }
-            return $item;
-          } 
+        isSelected : function(valueOrIdx) {
+          return this.findItem(valueOrIdx).hasClass(this.options.item.classes.selected);
+        },
                  
-          function selectOneItem(valueOrIdx) {
-            findItem(valueOrIdx).addClass(self.options.classes.active);
-          }
+        selectOneItem : function (valueOrIdx) {
+          this.findItem(valueOrIdx).addClass(this.options.item.classes.selected);
+        },
 
-          function unselectOneItem(valueOrIdx) {
-            findItem(valueOrIdx).removeClass(self.options.classes.active);
-          }
+        unselectOneItem : function (valueOrIdx) {
+            this.findItem(valueOrIdx).removeClass(this.options.item.classes.selected);
+        },
 
-          if (updates["selected"]) {
-            if (this.options.multiSelect) {
-            } else {
-              unselectOneItem(updates["selected"].oldValue);
-              selectOneItem(updates["selected"].value);
-            }
+        clearSelectedItems : function() {
+          let selectedClass = this.options.item.classes.selected;
+          this._$items.filter(`.${selectedClass}`).removeClass(selectedClass);
+        },
 
+
+        getSelectedItems : function() {
+          return  this._$items.filter(`.${selectedClass}`).map( (el) => {
+            return this.getItemValue(el);
+          });
+        },
+
+        toggleSelectOneItem : function(valueOrIdx) {
+          if (this.isSelected(valueOrIdx)) {
+            this.unselectOneItem(valueOrIdx);
+          } else {
+            this.selectOneItem(valueOrIdx);
           }
         }
 
@@ -212,61 +239,41 @@ define('skylark-domx-plugins-groups/groups',[
   "./group"
 ],function(langx,$,elmx,plugins,Collapse,groups,Group){
 
-    var Linear = Group.inherit({
-        klassName : "Linear",
+  var Linear = Group.inherit({
+    klassName : "Tiler",
 
-        pluginName : "domx.plugins.groups.linear",
+    pluginName : "lark.groups.tiler",
 
-        options : {
-          multitier : {
-            mode   : "",  // "tree" or "accordion" or "popover"
-            levels : 2,
-            selectors :  {
-              children : "ul",  // "> .list-group"
-              hasChildren : ":has(ul)",
-              toggler : " > a"
-            },
-            classes : {
-              collapsed : "",
-              expanded : ""
-            },
+    options: {
+       alignment: 'left',
+        infiniteScroll: false,
+        itemRendered: null,
+        noItemsHTML: 'no items found',
+        selectable: false,
 
-            multiExpand : true,
-          }
+        template : '<ul class="clearfix repeater-linear" data-container="true" data-infinite="true" data-preserve="shallow"></ul>',
+        item : {
+            template: '<li class="repeater-item"><img  src="{{ThumbnailImage}}" class="thumb"/><h4 class="title">{{name}}</h4></div>'
         },
 
-        state : {
-          selected : Object
-        },
+        viewClass: "repeater-linear",
+        renderItem : null
+    },
 
-        _construct : function(elm,options) {
-            this.overrided(elm,options);
-            var self = this,
-                itemSelector = this.options.selectors.item;
+    _construct: function (elm, options) {
+      this.overrided(elm, options);
 
-            var multitierMode = this.options.multitier.mode,
-                hasChildrenSelector = this.options.multitier.selectors.hasChildren,
-                childrenSelector = this.options.multitier.selectors.children;           
+      this._renderItem = langx.template(this.options.item.template);
 
-
-              var multiExpand = self.options.multitier.multiExpand,
-                  togglerSelector = self.options.multitier.selectors.toggler;
-
-              this._$items.has(childrenSelector).find(togglerSelector).on("click" + "." + this.pluginName, function(e) {
-                  e.preventDefault();
-
-                  if (multiExpand) {
-                      langx.scall($(this).closest(itemSelector).siblings().removeClass("active").children(childrenSelector+".in").plugin("domx.toggles.collapse"),"hide");
-                  }
-                  $(this).closest(itemSelector).toggleClass("active").children(childrenSelector).plugin("domx.toggles.collapse").toggle();
-              });
-
-             this._$items.filter(".active").has(childrenSelector).children(childrenSelector).addClass("collapse in");
-             this._$items.not(".active").has(childrenSelector).children(childrenSelector).addClass("collapse");
-        }
+      for (var i=0;i<options.items.length;i++) {
+        var itemHtml = this._renderItem(options.items[i]);
+        this._velm.append($(itemHtml));
+      }
+    }
 
   });
 
+  plugins.register(Linear);
 
   return groups.Linear = Linear;
 
@@ -290,7 +297,7 @@ define('skylark-domx-plugins-groups/slidable',[
   var Slidable = plugins.Plugin.inherit({
     klassName: "Slidable",
 
-    pluginName : "domx.plugins.groups.slidable",
+    pluginName : "lark.groups.slidable",
 
     options: {
       selectors : {
@@ -1730,7 +1737,7 @@ define('skylark-domx-plugins-groups/sortable',[
     var Sortable = plugins.Plugin.inherit({
         klassName: "Sortable",
 
-        pluginName : "lark.sortable",
+        pluginName : "lark.groups.sortable",
         
         options : {
             connectWith: false,
@@ -1844,7 +1851,7 @@ define('skylark-domx-plugins-groups/sortable',[
   var Tiler = Group.inherit({
     klassName : "Tiler",
 
-    pluginName : "domx.plugins.groups.tiler",
+    pluginName : "lark.groups.tiler",
 
     options: {
         alignment: 'left',
@@ -1882,16 +1889,32 @@ define('skylark-domx-plugins-groups/sortable',[
   "skylark-langx/langx",
   "skylark-domx-query",
   "skylark-domx-velm",
+  "skylark-domx-lists",
   "skylark-domx-plugins-base",
   "./groups",
-  "./linear"
-],function(langx,$,elmx,plugins,groups,Linear){
+  "./group",
+  "skylark-domx-plugins-toggles/collapse"
+],function(langx,$,elmx,lists,plugins,groups,Group){
 
 
-  var Tree = Linear.inherit({
+  var Tree = Group.inherit({
     klassName : "Tree",
 
-    pluginName : "domx.plugins.groups.tree"
+    pluginName : "lark.groups.tree",
+
+    _construct : function(elm,options) {
+        this.overrided(elm,options);
+
+        lists.multitier(elm,langx.mixin({
+          hide : function($el) {
+
+          },
+          toggle : function($el) {
+
+          }
+        },this.options));
+    }
+
   });
 
 

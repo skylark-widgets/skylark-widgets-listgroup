@@ -8,61 +8,41 @@
   "./group"
 ],function(langx,$,elmx,plugins,Collapse,groups,Group){
 
-    var Linear = Group.inherit({
-        klassName : "Linear",
+  var Linear = Group.inherit({
+    klassName : "Tiler",
 
-        pluginName : "domx.plugins.groups.linear",
+    pluginName : "lark.groups.tiler",
 
-        options : {
-          multitier : {
-            mode   : "",  // "tree" or "accordion" or "popover"
-            levels : 2,
-            selectors :  {
-              children : "ul",  // "> .list-group"
-              hasChildren : ":has(ul)",
-              toggler : " > a"
-            },
-            classes : {
-              collapsed : "",
-              expanded : ""
-            },
+    options: {
+       alignment: 'left',
+        infiniteScroll: false,
+        itemRendered: null,
+        noItemsHTML: 'no items found',
+        selectable: false,
 
-            multiExpand : true,
-          }
+        template : '<ul class="clearfix repeater-linear" data-container="true" data-infinite="true" data-preserve="shallow"></ul>',
+        item : {
+            template: '<li class="repeater-item"><img  src="{{ThumbnailImage}}" class="thumb"/><h4 class="title">{{name}}</h4></div>'
         },
 
-        state : {
-          selected : Object
-        },
+        viewClass: "repeater-linear",
+        renderItem : null
+    },
 
-        _construct : function(elm,options) {
-            this.overrided(elm,options);
-            var self = this,
-                itemSelector = this.options.selectors.item;
+    _construct: function (elm, options) {
+      this.overrided(elm, options);
 
-            var multitierMode = this.options.multitier.mode,
-                hasChildrenSelector = this.options.multitier.selectors.hasChildren,
-                childrenSelector = this.options.multitier.selectors.children;           
+      this._renderItem = langx.template(this.options.item.template);
 
-
-              var multiExpand = self.options.multitier.multiExpand,
-                  togglerSelector = self.options.multitier.selectors.toggler;
-
-              this._$items.has(childrenSelector).find(togglerSelector).on("click" + "." + this.pluginName, function(e) {
-                  e.preventDefault();
-
-                  if (multiExpand) {
-                      langx.scall($(this).closest(itemSelector).siblings().removeClass("active").children(childrenSelector+".in").plugin("domx.toggles.collapse"),"hide");
-                  }
-                  $(this).closest(itemSelector).toggleClass("active").children(childrenSelector).plugin("domx.toggles.collapse").toggle();
-              });
-
-             this._$items.filter(".active").has(childrenSelector).children(childrenSelector).addClass("collapse in");
-             this._$items.not(".active").has(childrenSelector).children(childrenSelector).addClass("collapse");
-        }
+      for (var i=0;i<options.items.length;i++) {
+        var itemHtml = this._renderItem(options.items[i]);
+        this._velm.append($(itemHtml));
+      }
+    }
 
   });
 
+  plugins.register(Linear);
 
   return groups.Linear = Linear;
 

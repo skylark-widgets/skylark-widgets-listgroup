@@ -13,7 +13,7 @@ define([
   var Slidable = plugins.Plugin.inherit({
     klassName: "Slidable",
 
-    pluginName : "domx.plugins.groups.slidable",
+    pluginName : "lark.groups.slidable",
 
     options: {
       selectors : {

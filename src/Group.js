@@ -9,15 +9,11 @@
     var Group = plugins.Plugin.inherit({
         klassName : "Group",
 
-        pluginName : "domx.plugins.groups.group",
+        pluginName : "lark.groups.group",
 
         options : {
-        	multiSelect: false,
-
         	classes : {
-          	active : "active"
         	},
-
 
         	selectors : {
           	item : "li",                   // ".list-group-item"
@@ -25,7 +21,14 @@
 
           item : {
             template : "<span><i class=\"glyphicon\"></i><a href=\"javascript: void(0);\"></a> </span>",
-            checkable : false,
+
+            selectable: true,
+            multiSelect: false,
+
+            classes : {
+              selected : "active"
+            },
+
             selectors : {
               icon : " > span > i",
               text : " > span > a"
@@ -35,10 +38,8 @@
         	selected : 0
         },
 
-        state : {
-          selected : Object
-        },
-
+        selected : null,
+ 
         _construct : function(elm,options) {
             this.overrided(elm,options);
             var self = this,
@@ -50,58 +51,76 @@
             velm.on('click', itemSelector, function () {
                 var veItem = elmx(this);
 
-                if (!veItem.hasClass('disabled')) {
-                  var value = veItem.data("value");
-                  if (value === undefined) {
-                    value = self._$items.index(this);
-                  }
-                  let oldValue = self.selected;
-                  if (oldValue !== value) {
-                    self.selected = value;
-                    self._refresh({
-                      "selected" : {
-                        oldValue,
-                        value
-                      }
-                    });
-                  }
+                if (self.options.item.selectable && !veItem.hasClass('disabled')) {
+                    let value = self.getItemValue(this);
+                    if (self.options.item.multiSelect) {
+                      self.toggleSelectOneItem(value);
+                    } else {
+                      self.clearSelectedItems();
+                      self.selectOneItem(value);
+                    }
                 }
 
                 //veItem.blur();
                 return false;
             });
-            this.selected = this.options.selected;
 
+            if (this.options.item.multiSelect) {
+              this.selected = [];
+            } else {
+              this.selected = null;
+            }
+            ///this.selected = this.options.selected;
+        },
+        
+        findItem : function (valueOrIdx) {
+          var $item;
+          if (langx.isNumber(valueOrIdx)) {
+            $item = this._$items.eq(valueOrIdx);
+          } else {
+            $item = this._$items.filter('[data-value="' + valueOrIdx + '"]');
+          }
+          return $item;
         },
 
-        _refresh : function(updates) {
-          var self  = this;
+        getItemValue : function(elm) {
+          let $item = $(elm),
+              value = $item.data("value");
+          if (value === undefined) {
+            value = this._$items.index($item[0]);
+          }
+          return value;
+        },
 
-          function findItem(valueOrIdx) {
-            var $item;
-            if (langx.isNumber(valueOrIdx)) {
-              $item = self._$items.eq(valueOrIdx);
-            } else {
-              $item = self._$items.filter('[data-value="' + valueOrIdx + '"]');
-            }
-            return $item;
-          } 
+        isSelected : function(valueOrIdx) {
+          return this.findItem(valueOrIdx).hasClass(this.options.item.classes.selected);
+        },
                  
-          function selectOneItem(valueOrIdx) {
-            findItem(valueOrIdx).addClass(self.options.classes.active);
-          }
+        selectOneItem : function (valueOrIdx) {
+          this.findItem(valueOrIdx).addClass(this.options.item.classes.selected);
+        },
 
-          function unselectOneItem(valueOrIdx) {
-            findItem(valueOrIdx).removeClass(self.options.classes.active);
-          }
+        unselectOneItem : function (valueOrIdx) {
+            this.findItem(valueOrIdx).removeClass(this.options.item.classes.selected);
+        },
 
-          if (updates["selected"]) {
-            if (this.options.multiSelect) {
-            } else {
-              unselectOneItem(updates["selected"].oldValue);
-              selectOneItem(updates["selected"].value);
-            }
+        clearSelectedItems : function() {
+          let selectedClass = this.options.item.classes.selected;
+          this._$items.filter(`.${selectedClass}`).removeClass(selectedClass);
+        },
 
+
+        getSelectedItems : function() {
+          return  this._$items.filter(`.${selectedClass}`).map( (el) => {
+            return this.getItemValue(el);
+          });
+        },
+
+        toggleSelectOneItem : function(valueOrIdx) {
+          if (this.isSelected(valueOrIdx)) {
+            this.unselectOneItem(valueOrIdx);
+          } else {
+            this.selectOneItem(valueOrIdx);
           }
         }
 
