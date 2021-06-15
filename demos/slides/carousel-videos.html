@@ -31,7 +31,7 @@
 <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
 <script>
 
-function initPage(langx,domx,lists) {
+function initPage(langx,domx,groups) {
     var $ = domx.query;
 
     $(function () {
@@ -241,7 +241,7 @@ function initPage(langx,domx,lists) {
       }
 
 
-      $('#video-carousel').plugin("domx.plugins.lists.slidable",{
+      $('#video-carousel').plugin("domx.plugins.groups.slidable",{
           items: videos,
           mode : "slider",
           carousel: true,

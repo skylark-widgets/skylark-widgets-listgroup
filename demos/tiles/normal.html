@@ -154,7 +154,7 @@ html {
 <script>
 
 
-function initPage(langx,domx,lists) {
+function initPage(langx,domx,groups) {
     var $ = domx.query;
 
     var container = $("#image-tiler");
@@ -210,7 +210,7 @@ function initPage(langx,domx,lists) {
         return $img[0];
     }
 
-    lists.Tiler(container[0],{
+    groups.Tiler(container[0],{
         items : links
     });
 

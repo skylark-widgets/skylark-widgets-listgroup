@@ -55,7 +55,16 @@
                   if (value === undefined) {
                     value = self._$items.index(this);
                   }
-                  self.selected = value;
+                  let oldValue = self.selected;
+                  if (oldValue !== value) {
+                    self.selected = value;
+                    self._refresh({
+                      "selected" : {
+                        oldValue,
+                        value
+                      }
+                    });
+                  }
                 }
 
                 //veItem.blur();
@@ -66,7 +75,6 @@
         },
 
         _refresh : function(updates) {
-          this.overrided(updates);
           var self  = this;
 
           function findItem(valueOrIdx) {

@@ -104,6 +104,11 @@ requirejs.config({
             main: 'main'
          },
          {
+           name : "skylark-langx-urls",
+           location : "../node_modules/skylark-langx-urls/dist/uncompressed/skylark-langx-urls",
+            main: 'main'
+         },
+         {
            name : "skylark-langx",
            location : "../node_modules/skylark-langx/dist/uncompressed/skylark-langx",
             main: 'main'
@@ -153,6 +158,11 @@ requirejs.config({
          {
            name : "skylark-domx-geom",
            location : "../node_modules/skylark-domx-geom/dist/uncompressed/skylark-domx-geom",
+            main: 'main'
+         },
+         {
+           name : "skylark-domx-iframes",
+           location : "../node_modules/skylark-domx-iframes/dist/uncompressed/skylark-domx-iframes",
             main: 'main'
          },
          {
@@ -243,7 +253,7 @@ requirejs.config({
             main: 'main'
           },   
           {
-            name: 'skylark-domx-plugins-lists',
+            name: 'skylark-domx-plugins-groups',
             location : "../src",
             main: 'main'
           }      
@@ -254,9 +264,9 @@ requirejs.config({
 // require(["module/name", ...], function(params){ ... });
 require(["skylark-langx/langx","skylark-domx","skylark-bootstrap3/loadedInit"], function (langx,domx,bsInit) {
     bsInit();
-    require(["skylark-domx-plugins-lists"], function (lists) {
+    require(["skylark-domx-plugins-groups"], function (groups) {
         if (window.initPage) {
-            window.initPage(langx,domx,lists);
+            window.initPage(langx,domx,groups);
         }
     });
 });

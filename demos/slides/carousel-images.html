@@ -34,7 +34,7 @@
 <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
 <script>
 
-function initPage(langx,domx,lists) {
+function initPage(langx,domx,groups) {
     var $ = domx.query;
     $(function () {
       'use strict'
@@ -110,7 +110,7 @@ function initPage(langx,domx,lists) {
             return $img[0];
         }
 
-      $('#image-carousel').plugin("domx.plugins.lists.slidable",{
+      $('#image-carousel').plugin("domx.plugins.groups.slidable",{
         items: carouselLinks,
         mode : "slider",
         carousel: true,

@@ -157,27 +157,29 @@
 		</ul>
 	</section>
 	<a href="http://github.com/farhadi/html5sortable"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/edc6dae7a1079163caf7f17c60495bbb6d027c93/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f677265656e5f3030373230302e706e67" alt="Fork me on GitHub"></a>
-    <script type="text/javascript" src="../../dist/uncompressed/skylark-domx-interact-all.js"></script>
-    <script>
-    	$ = skylarkjs.domx.query;
-		$(function() {
-			$('.sortable').sortable({
-				items : "li"
-			});
-			
-			$('.handles').sortable({
-				items : "li",
-				handle: 'li span'
-			});
-			$('.connected').sortable({
-				items : "li",
-				connectWith: '.connected'
-			});
-			$('.exclude').sortable({
-				items: 'li:not(.disabled)'
-			});
+	<script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
+	<script>
+		function initPage(langx,domx,groups) {
+			var $ = domx.query;
+			$(function() {
+				$('.sortable').sortable({
+					items : "li"
+				});
+				
+				$('.handles').sortable({
+					items : "li",
+					handle: 'li span'
+				});
+				$('.connected').sortable({
+					items : "li",
+					connectWith: '.connected'
+				});
+				$('.exclude').sortable({
+					items: 'li:not(.disabled)'
+				});
 
-		});
+			});
+		}
 	</script>
 </body>
 </html>

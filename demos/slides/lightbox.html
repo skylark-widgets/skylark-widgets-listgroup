@@ -150,7 +150,7 @@
 <script>
 
 
-function initPage(langx,domx,lists) {
+function initPage(langx,domx,groups) {
     var $ = domx.query;
 
     $(function () {
@@ -258,7 +258,7 @@ function initPage(langx,domx,lists) {
             callbacks
           );
 
-          return new lists.Slidable(container[0],viewOptions);
+          return new groups.Slidable(container[0],viewOptions);
       });
 
     });
