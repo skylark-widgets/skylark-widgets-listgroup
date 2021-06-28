@@ -6,7 +6,7 @@
   "./groups",
   "./group"
 ],function(langx,$,elmx,plugins,groups,Group){
-
+  'use strict'
 
   var Tiler = Group.inherit({
     klassName : "Tiler",
@@ -22,7 +22,8 @@
         viewClass: "repeater-tile",
         template : '<div class="clearfix repeater-tile" data-container="true" data-infinite="true" data-preserve="shallow"></div>',
         item : {
-            template: '<div class="thumbnail"><img height="75" src="<%= href %>" width="65"><span><%= title %></span></div>'
+            template: '<div class="thumbnail"><img height="75" src="<%= href %>" width="65"><span><%= title %></span></div>',
+            selectable : true
         },
         renderItem : null
     },

@@ -1,6 +1,7 @@
 define([
     "./groups",
     "./group",
+    "./carousel",
     "./linear",
     "./slidable",
     "./sortable",

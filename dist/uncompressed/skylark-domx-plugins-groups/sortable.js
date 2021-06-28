@@ -11,6 +11,8 @@ define([
     "skylark-domx-plugins-dnd/draggable",
     "skylark-domx-plugins-dnd/droppable"
 ],function(groups, langx,noder,datax,geom,eventer,styler,$,plugins,Draggable,Droppable){
+   'use strict'
+
     var on = eventer.on,
         off = eventer.off,
         attr = datax.attr,

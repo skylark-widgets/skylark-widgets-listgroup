@@ -8,6 +8,7 @@
   "./group",
   "skylark-domx-plugins-toggles/collapse"
 ],function(langx,$,elmx,lists,plugins,groups,Group){
+  'use strict'
 
 
   var Tree = Group.inherit({

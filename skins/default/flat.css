@@ -1,0 +1,23 @@
+/* @group Flat */
+.flipster--flat .flipster__container,
+.flipster--flat .flipster__item,
+.flipster--flat .flipster__item__content {
+  -webkit-transition: all 400ms ease-in-out;
+  -o-transition: all 400ms ease-in-out;
+  transition: all 400ms ease-in-out;
+}
+.flipster--flat .flipster__item--past,
+.flipster--flat .flipster__item--future {
+  opacity: 0.5;
+}
+.flipster--flat .flipster__item--past .flipster__item__content {
+  -webkit-transform: scale(0.75);
+      -ms-transform: scale(0.75);
+          transform: scale(0.75);
+}
+.flipster--flat .flipster__item--future .flipster__item__content {
+  -webkit-transform: scale(0.75);
+      -ms-transform: scale(0.75);
+          transform: scale(0.75);
+}
+/* @end */

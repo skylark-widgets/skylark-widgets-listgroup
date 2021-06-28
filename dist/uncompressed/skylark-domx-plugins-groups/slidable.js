@@ -158,30 +158,30 @@ define([
 
       // Callback function executed when the Gallery is initialized.
       // Is called with the gallery instance as "this" object:
-      onopen: undefined,
+      onopen: langx.noop,
       // Callback function executed when the Gallery has been initialized
       // and the initialization transition has been completed.
       // Is called with the gallery instance as "this" object:
-      onopened: undefined,
+      onopened: langx.noop,
       // Callback function executed on slide change.
       // Is called with the gallery instance as "this" object and the
       // current index and slide as arguments:
-      onslide: undefined,
+      onslide: langx.noop,
       // Callback function executed after the slide change transition.
       // Is called with the gallery instance as "this" object and the
       // current index and slide as arguments:
-      onslideend: undefined,
+      onslideend: langx.noop,
       // Callback function executed on slide content load.
       // Is called with the gallery instance as "this" object and the
       // slide index and slide element as arguments:
-      onslidecomplete: undefined,
+      onslidecomplete: langx.noop,
       // Callback function executed when the Gallery is about to be closed.
       // Is called with the gallery instance as "this" object:
-      onclose: undefined,
+      onclose: langx.noop,
       // Callback function executed when the Gallery has been closed
       // and the closing transition has been completed.
       // Is called with the gallery instance as "this" object:
-      onclosed: undefined
+      onclosed: langx.noop
     },
 
     _construct: function (gallery, options) {

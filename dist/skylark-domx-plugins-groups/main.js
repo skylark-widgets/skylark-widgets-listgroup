@@ -5,5 +5,5 @@
  * @link https://github.com/skylark-domx/skylark-domx-plugins-groups/
  * @license MIT
  */
-define(["./groups","./group","./linear","./slidable","./sortable","./tiler","./tree"],function(e){return e});
+define(["./groups","./group","./carousel","./linear","./slidable","./sortable","./tiler","./tree"],function(e){return e});
 //# sourceMappingURL=sourcemaps/main.js.map

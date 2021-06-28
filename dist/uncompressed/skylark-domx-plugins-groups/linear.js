@@ -7,11 +7,12 @@
   "./groups",
   "./group"
 ],function(langx,$,elmx,plugins,Collapse,groups,Group){
+  'use strict'
 
   var Linear = Group.inherit({
     klassName : "Tiler",
 
-    pluginName : "lark.groups.tiler",
+    pluginName : "lark.groups.linear",
 
     options: {
        alignment: 'left',
@@ -22,7 +23,8 @@
 
         template : '<ul class="clearfix repeater-linear" data-container="true" data-infinite="true" data-preserve="shallow"></ul>',
         item : {
-            template: '<li class="repeater-item"><img  src="{{ThumbnailImage}}" class="thumb"/><h4 class="title">{{name}}</h4></div>'
+            template: '<li class="repeater-item"><img  src="{{ThumbnailImage}}" class="thumb"/><h4 class="title">{{name}}</h4></div>',
+            
         },
 
         viewClass: "repeater-linear",

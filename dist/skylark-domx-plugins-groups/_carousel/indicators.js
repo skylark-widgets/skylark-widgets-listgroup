@@ -1,0 +1,9 @@
+/**
+ * skylark-domx-plugins-groups - The skylark list plugin library.
+ * @author Hudaokeji, Inc.
+ * @version v0.9.0
+ * @link https://github.com/skylark-domx/skylark-domx-plugins-groups/
+ * @license MIT
+ */
+define(["skylark-langx/langx","skylark-domx-browser","skylark-domx-eventer","skylark-domx-query","skylark-domx-velm","skylark-domx-plugins-base","../groups"],function(t,i,n,a,e,s,r){return s.Plugin.inherit({klassName:"Indicators",pluginName:"lark.groups.carousel.indicators",options:{thumbnail:!0,indicator:{template:'<li \n                      <% if (title) { %> \n                        title = "<%= title %>" \n                      <% } %> \n                      <% if (thumbnail) { %> \n                        style = "background: url(\'<%= thumbnail %>\'" \n                      <% } %> \n                     />\n                   ',indexAttrName:"data-index",selector:"> li",classes:{active:"active"}}},_construct:function(t,i){s.Plugin.prototype._construct.call(this,t,i),this._velm=this.elmx(),this.$indicators=this._velm.query(this.options.indicator.selector),this._velm.on("click",`[${this.options.indicator.indexAttrName}]`,t=>{var i=a(t.target).attr(this.options.indicator.indexAttrName);this.options.carousel.jump(i),t.preventDefault()})},createIndicator:function(i){return this._renderIndicatorHtml||(this._renderIndicatorHtml=t.template(this.options.indicator.template)),a(this._renderIndicatorHtml(i))[0]},addIndicator:function(t,i){var n=this.createIndicator(i);n.setAttribute("data-index",t),this._velm.append(n),this.$indicators=this.$indicators.add(n)},setActiveIndicator:function(t){if(this.$indicators){let i=this.options.indicator.classes.active;this.activeIndicator&&this.activeIndicator.removeClass(i),this.activeIndicator=a(this.$indicators[t]),this.activeIndicator.addClass(i)}}})});
+//# sourceMappingURL=../sourcemaps/_carousel/indicators.js.map

@@ -5,5 +5,5 @@
  * @link https://github.com/skylark-domx/skylark-domx-plugins-groups/
  * @license MIT
  */
-define(["skylark-langx/skylark"],function(n){return n.attach("domx.plugins.groups",{})});
+define(["skylark-langx/skylark"],function(n){"use strict";return n.attach("domx.plugins.groups")});
 //# sourceMappingURL=sourcemaps/groups.js.map
