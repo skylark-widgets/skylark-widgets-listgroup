@@ -22,6 +22,22 @@
     pluginName : "lark.groups.carousel",
 
         options : {
+            classes : {
+             // The class to add when the carousel is visible:
+              display: 'display',
+              // The class to add when the carousel only displays one item:
+              single: 'single',
+              // The class to add when the left edge has been reached:
+              leftEdge: 'left',
+              // The class to add when the right edge has been reached:
+              rightEdge: 'right',
+              // The class to add when the automatic slideshow is active:
+              cycling: 'cycling',
+
+              // The class to add when the carousel controls are visible:
+              controls: 'controls',
+            },
+
             cycle : {
               // [milliseconds]
               // If a positive number, Carousel will automatically advance to next item after that number of milliseconds
@@ -44,7 +60,7 @@
                 // The class for the "close" control:
                 close: '.close',
                 // The class for the "play-pause" toggle control:
-                playPause: '.play-pause'
+                cycleStop: '.cycle-stop'
               }
             },
 
@@ -68,13 +84,14 @@
               }
             },
 
-            //items : ".carousel-item",  // the items are from dom elements
-            //items : [{                 // the items are from json object
-            //  type: 'image',href : "https://xxx.com/1.jpg",title : "1"
-            //},{
-            //  type: 'image',href : "https://xxx.com/1.jpg",title : "1"
-            // }],
-
+            data : {
+              //items : ".carousel-item",  // the items are from dom elements
+              //items : [{                 // the items are from json object
+              //  type: 'image',href : "https://xxx.com/1.jpg",title : "1"
+              //},{
+              //  type: 'image',href : "https://xxx.com/1.jpg",title : "1"
+              // }],
+            },
 
             effect : "slide",
 
@@ -157,10 +174,15 @@
                 eventer.stop(e);
             });
 
+            this._$elm.find(this.options.controls.selectors.cycleStop).on("click",(e)=>{
+                this.cycle(!this.cycled);
+                eventer.stop(e);
+            });
+
             this._effect = new effects[this.options.effect](this);
 
-            if (this.options.items) {
-                this.addItems(this.options.items);
+            if (this.options.data.items) {
+                this.addItems(this.options.data.items);
                 this.jump(this.options.startIndex)
             }
 
@@ -197,7 +219,12 @@
             if (langx.isDefined(cycling)) {
               this.cycled = !!cycling;
              ///  e || (this.paused = false)
-            }
+              if (this.cycled) {
+                 this._velm.addClass(this.options.classes.cycling)
+              } else {
+                 this._velm.removeClass(this.options.classes.cycling)
+              }
+            } 
 
             if (this.interval){
               clearInterval(this.interval);
@@ -209,6 +236,7 @@
 
             return this;
         },
+
 
         getItemForDirection : function(direction, active) {
             var activeIndex = this.getItemIndex(active)

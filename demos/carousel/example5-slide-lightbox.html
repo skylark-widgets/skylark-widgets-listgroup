@@ -8,9 +8,13 @@
 <title>skylark blueimp gallery</title>
 <meta name="description" content="The skylark blueimp gallery is a powerful, responsive and customizable gallery widget library, supports a variety of view modes such as list, masonory , slider, carousel, lightbox , flipbook, etc.,  optimized for both mobile and desktop web browsers. It can contain a variety of items such as images, videos, pages, etc., features swipe, mouse and keyboard navigation, transition effects, slideshow functionality, fullscreen support and on-demand content loading and can be extended to display additional content types.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="../../skins/default/slidable.css">
-<link rel="stylesheet" href="../../skins/default/indicator.css">
+
+  <link rel="stylesheet" href="../../skins/default/carousel.css">
+  <link rel="stylesheet" href="../../skins/default/carousel-slide.css">
+  <link rel="stylesheet" href="../../skins/default/indicators.css">
+
 <style>
+
 #image-lightbox {
     position: fixed;
     z-index: 999999;
@@ -23,6 +27,57 @@
     right: 0;
     bottom: 0;
     left: 0;
+}
+#image-lightbox  .item img {
+    position: absolute;
+    left: 0;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+}
+
+body:last-child #image-lightbox.cycling > .cycle-stop {
+    background-position: -20px 0;
+}
+
+body:last-child #image-lightbox > .cycle-stop {
+    width: 20px;
+    height: 20px;
+    background-size: 40px 20px;
+    background-image: url(../assets/images/play-pause.svg);
+
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    display: block;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+
+#image-lightbox.cycling > .cycle-stop {
+    background-position: -15px 0;
+}
+
+#image-lightbox > .cycle-stop {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 15px;
+    height: 15px;
+    background: url(../assets/images/play-pause.png) 0 0 no-repeat;
+    cursor: pointer;
+    opacity: 0.5;
+    display: none;
+}
+
 </style>
 </head>
 <body>
@@ -137,14 +192,14 @@
     
 </div>
 <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
-<div id="image-lightbox" class="lark-domx-slidable  lark-domx-slidable-display lark-domx-slidable-controls" data-viewmode="lightbox">
-    <div class="slides"></div>
+<div id="image-lightbox" class="lark-carousel slide" data-options="mode=:\"lightbox\"">
+    <div class="items"></div>
     <h3 class="title"></h3>
     <a class="prev">‹</a>
     <a class="next">›</a>
     <a class="close">×</a>
-    <a class="play-pause"></a>
-    <ol class="indicator"></ol>
+    <a class="cycle-stop"></a>
+    <ol class="indicators"></ol>
 </div>
 <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
 <script>
@@ -220,7 +275,9 @@ function initPage(langx,domx,groups) {
 
                     called = true
                     $img.off('load error', callbackWrapper);
-                    callback(event)
+                    if (callback) {
+                        callback(event)
+                    }
                 }
             }
 
@@ -238,9 +295,18 @@ function initPage(langx,domx,groups) {
                 "maxWidth" : "100%",
                 "maxHeight" : "100%"
             });
-            return $img[0];
+            return $("<div/>").append($img);
         }
 
+
+        var items = links.map(function(index,link){
+           let $img = $(link).find('img');
+           return {
+            "title" : link.title,
+            "href" : link.href,
+            "thumbnail" : $img.attr("src")
+           };
+        });
 
 
           var viewOptions = Object.assign(
@@ -248,9 +314,28 @@ function initPage(langx,domx,groups) {
             // on the Gallery widget:
             container.data(),
             {
-               items : links, 
-                mode : "lightbox",
-                renderItem : renderImageItem,
+               data : {
+                   items : items
+               },
+
+               item : {
+                 template : renderImageItem
+               },
+
+               indicators : {
+                  indicator : {
+                    template : "<li " + 
+                      "<% if (title) { %>" +  
+                        "title = \"<%= title %>\""+ 
+                      "<% } %>" +  
+                      "<% if (thumbnail) { %>" +  
+                        " style = \"background: url('<%= thumbnail %>'\""+ 
+                      "<% } %>"+ 
+                   "/>"
+                  }
+               },
+
+              ///   renderItem : renderImageItem,
               container: container[0],
               index: this,
               event: event
@@ -259,6 +344,7 @@ function initPage(langx,domx,groups) {
           );
 
           let carsousel = new groups.Carousel(container[0],viewOptions);
+
           container.find(".close").click(function(){
               container.hide();
           })

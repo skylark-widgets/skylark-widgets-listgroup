@@ -19,15 +19,7 @@
       thumbnail : true,
 
       indicator : {
-	      template : `<li 
-                      <% if (title) { %> 
-                        title = "<%= title %>" 
-                      <% } %> 
-                      <% if (thumbnail) { %> 
-                        style = "background: url('<%= thumbnail %>'" 
-                      <% } %> 
-                     />
-                   `,
+	      template : "<li/>",
 	      indexAttrName : "data-index",
 	      selector : "> li",
 	      classes : {

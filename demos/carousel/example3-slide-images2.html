@@ -129,7 +129,9 @@ function initPage(langx,domx,groups) {
       $('#image-carousel').plugin("lark.groups.carousel",{
         effect : "slide",
 
-        items: carouselLinks,
+        data : {
+          items: carouselLinks
+        },
 
         ///renderItem : renderImageItem,
 

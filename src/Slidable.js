@@ -326,7 +326,7 @@ define([
       var that = this
       ///window.clearTimeout(this.timeout);
       if (this.timeout) {
-        this.timeout.stop();
+        this.timeout.cancel();
         this.timeout = null;
       }
       this.interval = time || this.options.slideshowInterval
@@ -339,7 +339,7 @@ define([
     pause: function () {
       //window.clearTimeout(this.timeout)
       if (this.timeout) {
-        this.timeout.stop();
+        this.timeout.cancel();
         this.timeout = null;
       }
       this.interval = null

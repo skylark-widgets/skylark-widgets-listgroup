@@ -251,7 +251,9 @@ function initPage(langx,domx,groups) {
 
       $('#video-carousel').plugin("lark.groups.carousel",{
           interval:0,
-          items: videos,
+          data : {
+            items: videos 
+          },
           effect : "slide",
           onjumped : onSlide,
 
