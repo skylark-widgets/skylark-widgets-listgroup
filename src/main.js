@@ -3,7 +3,6 @@ define([
     "./group",
     "./carousel",
     "./linear",
-    "./slidable",
     "./sortable",
     "./tiler",
     "./tree"
