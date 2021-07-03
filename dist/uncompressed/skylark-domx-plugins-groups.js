@@ -199,6 +199,10 @@ define('skylark-domx-plugins-groups/groups',[
           return $item;
         },
 
+        getItems : function() {
+          return this._$items;
+        },
+
         getItemValue : function(item) {
           let $item = $(item),
               value = $item.data("value");
@@ -387,7 +391,7 @@ define('skylark-domx-plugins-groups/groups',[
 
   return Indicators;
 });
- define('skylark-domx-plugins-groups/_carousel/effect_slide',[
+ define('skylark-domx-plugins-groups/_carousel/mode-slide',[
   "skylark-langx/langx",
   "skylark-langx-events",
   "skylark-domx-eventer"
@@ -395,7 +399,7 @@ define('skylark-domx-plugins-groups/groups',[
   'use strict'
 
 
-  var EffectSlide = events.Emitter.inherit({
+  var ModeSlide = events.Emitter.inherit({
 
 
     _construct : function(carsouel) {
@@ -461,13 +465,166 @@ define('skylark-domx-plugins-groups/groups',[
         isCycling && carsouel.cycle();
 
         return this
+    }
+
+  });
+
+
+  return ModeSlide;	
+});
+ define('skylark-domx-plugins-groups/_carousel/mode-rotate',[
+  "skylark-langx/langx",
+  "skylark-langx-events",
+  "skylark-domx-eventer",
+  "skylark-domx-query",
+  "skylark-domx-styler",
+  "skylark-domx-plugins-interact/rotatable",
+  "skylark-domx-plugins-interact/scalable"
+],function(langx,events,eventer,$,styler,Rotatable,Scalable){
+  'use strict'
+
+
+  var ModeRotate = events.Emitter.inherit({
+
+  	options : {
+
+  	},
+
+
+    _construct : function(carsouel) {
+    	this.carsouel = carsouel;
+
+    	this.reset();
+
+        this._$threedContainer = carsouel.$(`.${carsouel.options.modes.rotate.classes.threedContainer}`)
+
+    	this._rotatable = new Rotatable(this._$threedContainer[0],{
+		      started : function() {
+		          //playSpin(false);
+		      },
+
+		      stopped : function() {
+		          //playSpin(true);
+		      }
+    	});
+
+    	this._scalable = new Scalable(this._$threedContainer[0],{
+    		radius : carsouel.options.modes.rotate.radius,
+    		targets : carsouel.getItems()
+    	});
+
+    	this._start = 0;
+
     },
+
+    reset : function(delayTime) {
+    	let items = this.carsouel.getItems();
+    	if (items) {
+    		let itemsCount = this._itemsCount = items.length,
+    			deltaDeg = this._deltaDeg = 360 / itemsCount;
+
+		    for (var i = 0; i < itemsCount; i++) {
+		    	styler.css(items[i],{
+		    		transform : "rotateY(" + (i * deltaDeg) + "deg)"
+		    	});
+		    }    		
+    	}
+
+
+    },
+
+    jump : function(type, next) {
+    	let carsouel = this.carsouel,
+    		velm = carsouel.elmx(),
+    		options = carsouel.options
+
+        var $active =  carsouel.$(carsouel.getActiveItem()),
+        	$next = next || carsouel.getItemForDirection(type, $active),
+        	isCycling = carsouel.interval,
+        	direction = type == 'next' ? 'left' : 'right';
+
+        if ($next.hasClass('active')) {
+        	return (carsouel.moving = false)
+        }
+
+        let nextIndex = carsouel.getItemIndex($next);
+
+        var relatedTarget = $next[0];
+
+        var movingEvent = eventer.create('jumping.lark.carousel', {
+            relatedTarget: relatedTarget,
+            direction: direction
+        });
+
+        carsouel.trigger(movingEvent);
+        if (movingEvent.isDefaultPrevented()) return
+
+        carsouel.moving = true;
+
+        ///isCycling && carsouel.pause();
+
+        /*
+        if (this._$indicators.length) {
+            this._$indicators.find('.active').removeClass('active');
+            var $nextIndicator = $(this._$indicators.children()[this.getItemIndex($next)]);
+            $nextIndicator && $nextIndicator.addClass('active');
+        }
+        */
+        if (carsouel._indicators) {
+            carsouel._indicators.setActiveIndicator(nextIndex);
+        }
+
+        var movedEvent = eventer.create('jumped.lark.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
+
+        $next.addClass(type);
+        $next.reflow(); // [0].offsetWidth; // force reflow
+        $active.addClass(direction);
+        $next.addClass(direction);
+
+        let $itemsContainer = carsouel._$itemsContainer;
+
+        $itemsContainer
+            .one('transitionEnd', function() {
+                $next.removeClass([type, direction].join(' ')).addClass('active')
+                $active.removeClass(['active', direction].join(' '))
+                carsouel.moving = false
+                setTimeout(function() {
+                    carsouel.trigger(movedEvent)
+                }, 0)
+            })
+            .css("transform","rotateY(" + (nextIndex * this._deltaDeg) + "deg)")
+            .emulateTransitionEnd();
+
+        //isCycling && carsouel.cycle();
+
+        return this
+    }
 
 
   });
 
 
-  return EffectSlide;	
+  return ModeRotate;	
+});
+ define('skylark-domx-plugins-groups/_carousel/mode-coverflow',[
+  "skylark-langx/langx",
+  "skylark-langx-events",
+  "skylark-domx-query",
+],function(langx,events,$){
+  'use strict'
+
+
+  var ModeCoverflow = events.Emitter.inherit({
+
+
+    _construct : function(carsouel) {
+
+    }
+
+  });
+
+
+  return ModeCoverflow;	
 });
  define('skylark-domx-plugins-groups/carousel',[
   "skylark-langx/langx",
@@ -479,13 +636,12 @@ define('skylark-domx-plugins-groups/groups',[
   "./groups",
   "./group",
   "./_carousel/indicators",
-  "./_carousel/effect_slide"
-],function(langx,browser,eventer,$,elmx,plugins,groups,Group,Indicators,EffectSlide){
+  "./_carousel/mode-slide",
+  "./_carousel/mode-rotate",
+  "./_carousel/mode-coverflow"
+],function(langx,browser,eventer,$,elmx,plugins,groups,Group,Indicators,ModeSlide,ModeRotate,ModeCoverflow){
   'use strict'
 
-  var effects = {
-    "slide" : EffectSlide
-  };
  
   var Carousel = Group.inherit({
     klassName : "Carousel",
@@ -564,11 +720,11 @@ define('skylark-domx-plugins-groups/groups',[
               // }],
             },
 
-            effect : "slide",
+            mode : "slide",
 
             startIndex : 0,
 
-            effects : {
+            modes : {
               slide : {
                 classes : {
                   base : "slide"
@@ -577,8 +733,10 @@ define('skylark-domx-plugins-groups/groups',[
 
               rotate : {
                 classes : {
-                  base : "rotate"
-                }
+                  base : "rotate",
+                  threedContainer : "threed-container"
+                },
+                radius : 240
               },
 
               coverflow : {
@@ -650,7 +808,7 @@ define('skylark-domx-plugins-groups/groups',[
                 eventer.stop(e);
             });
 
-            this._effect = new effects[this.options.effect](this);
+            this._mode = new modes[this.options.mode](this);
 
             if (this.options.data.items) {
                 this.addItems(this.options.data.items);
@@ -733,7 +891,7 @@ define('skylark-domx-plugins-groups/groups',[
             if (this.moving) return this._$elm.one('jumped.lark.carousel', function() { that.jump(pos) }) // yes, "slid"
             if (activeIndex == pos)  return this.pause().cycle()
 
-            return this._effect.jump(pos > activeIndex ? 'next' : 'prev', this._$items.eq(pos))
+            return this._mode.jump(pos > activeIndex ? 'next' : 'prev', this._$items.eq(pos))
         },
 
         /*
@@ -765,7 +923,7 @@ define('skylark-domx-plugins-groups/groups',[
             if (this.moving) {
               return
             }
-            return this._effect.jump('next')
+            return this._mode.jump('next')
         },
 
         /*
@@ -773,9 +931,16 @@ define('skylark-domx-plugins-groups/groups',[
          */
         prev : function() {
            if (this.moving) return
-            return this._effect.jump('prev')
+            return this._mode.jump('prev')
         },
 
+        resetItems : function() {
+          Group.prototype.resetItems.call(this);
+
+          if (this._mode && this._mode.resetItems) {
+            this._mode.resetItems();
+          }
+        },
 
         addItems : function(items) {
             let index = this.getItemsCount();
@@ -805,6 +970,11 @@ define('skylark-domx-plugins-groups/groups',[
         }
   });
 
+  var modes = Carousel.modes = {
+    "slide" : ModeSlide,
+    "rotate" : ModeRotate,
+    "coverflow" : ModeCoverflow
+  };
 
   plugins.register(Carousel);
 

@@ -105,6 +105,10 @@
           return $item;
         },
 
+        getItems : function() {
+          return this._$items;
+        },
+
         getItemValue : function(item) {
           let $item = $(item),
               value = $item.data("value");

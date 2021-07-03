@@ -6,7 +6,7 @@
   'use strict'
 
 
-  var EffectSlide = events.Emitter.inherit({
+  var ModeSlide = events.Emitter.inherit({
 
 
     _construct : function(carsouel) {
@@ -72,11 +72,10 @@
         isCycling && carsouel.cycle();
 
         return this
-    },
-
+    }
 
   });
 
 
-  return EffectSlide;	
+  return ModeSlide;	
 });

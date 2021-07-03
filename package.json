@@ -26,11 +26,13 @@
     "skylark-domx": "git+https://github.com/skylark-domx/skylark-domx.git#master",
     "skylark-domx-plugins-base": "git+https://github.com/skylark-domx-plugins/skylark-domx-plugins-base.git",
     "skylark-domx-plugins-dnd": "git+https://github.com/skylark-domx-plugins/skylark-domx-plugins-dnd.git",
+    "skylark-domx-plugins-interact": "git+https://github.com/skylark-domx-plugins/skylark-domx-plugins-interact.git",
     "skylark-domx-plugins-toggles": "git+https://github.com/skylark-domx-plugins/skylark-domx-plugins-toggles.git#master",
     "skylark-langx": "git+https://github.com/skylark-langx/skylark-langx.git#master"
   },
   "devDependencies": {
-    "skylark-bootstrap3": "git+https://github.com/skylark-integration/skylark-bootstrap3.git#master"
+    "skylark-bootstrap3": "git+https://github.com/skylark-integration/skylark-bootstrap3.git#master",
+    "skylark-domx-plugins-players": "git+https://github.com/skylark-domx-plugins/skylark-domx-plugins-players.git"
   },
   "engines": {
     "node": ">=0.10.1"

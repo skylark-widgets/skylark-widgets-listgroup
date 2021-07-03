@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="../../skins/default/carousel.css">
   <link rel="stylesheet" href="../../skins/default/carousel-slide.css">
   <link rel="stylesheet" href="../../skins/default/indicators.css">
-  <link rel="stylesheet" href="../../skins/default/video.css">
+  <link rel="stylesheet" href="../../node_modules/skylark-domx-plugins-players/skins/default/video.css">
 
     <style>
 
@@ -29,7 +29,7 @@
     <h3 class="title"></h3>
     <a class="prev">‹</a>
     <a class="next">›</a>
-    <a class="play-pause"></a>
+    <a class="cycle-stop"></a>
 </div>
 <br>
 
@@ -39,7 +39,10 @@
 function initPage(langx,domx,groups) {
     var $ = domx.query;
 
-    $(function () {
+    require([
+      "skylark-domx-plugins-players"
+    ],function(players) {
+
       'use strict'
 
       // Initialize the Gallery as video carousel:
@@ -90,8 +93,19 @@ function initPage(langx,domx,groups) {
           }
         }
 
-      // Initialize the Gallery as image carousel:
         function renderVideoItem(item, callback) {
+          item.altText = item.altText || item.title;
+
+
+          playingVideo = $("<div/>").plugin("lark.players.video",{
+            media : item
+          })
+
+          return playingVideo.elm();
+        }
+
+      // Initialize the Gallery as image carousel:
+        function renderVideoItem_old(item, callback) {
             var type = item.type,
                 url = item.href,
                 title = item.title,
@@ -114,6 +128,7 @@ function initPage(langx,domx,groups) {
             //if (type) {
             //    type = type.split('/')[0];
             //}
+
 
 
             var videoContainer = $("<div/>"),
@@ -151,10 +166,10 @@ function initPage(langx,domx,groups) {
               posterImage.alt = altText
               videoContainerNode.appendChild(posterImage)
 
-            $posterImage.css({
-                "maxWidth" : "100%",
-                "maxHeight" : "100%"
-            });
+              $posterImage.css({
+                  "maxWidth" : "100%",
+                  "maxHeight" : "100%"
+              });
             }
             
 
@@ -254,7 +269,7 @@ function initPage(langx,domx,groups) {
           data : {
             items: videos 
           },
-          effect : "slide",
+          mode : "slide",
           onjumped : onSlide,
 
           item : {

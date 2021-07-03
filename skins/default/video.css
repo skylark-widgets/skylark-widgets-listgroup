@@ -62,7 +62,7 @@
   display: block;
 }
 .video-loading > a {
-  background: url(../img/loading.gif) center no-repeat;
+  background: url(./img/loading.gif) center no-repeat;
   background-size: 64px 64px;
 }
 

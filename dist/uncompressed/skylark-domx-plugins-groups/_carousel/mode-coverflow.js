@@ -6,7 +6,7 @@
   'use strict'
 
 
-  var EffectCoverflow = events.Emitter.inherit({
+  var ModeCoverflow = events.Emitter.inherit({
 
 
     _construct : function(carsouel) {
@@ -16,5 +16,5 @@
   });
 
 
-  return EffectCoverflow;	
+  return ModeCoverflow;	
 });

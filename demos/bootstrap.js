@@ -248,6 +248,16 @@ requirejs.config({
             main: 'main'
          },
          {
+           name : "skylark-domx-plugins-interact",
+           location : "../node_modules/skylark-domx-plugins-interact/dist/uncompressed/skylark-domx-plugins-interact",
+            main: 'main'
+         },
+         {
+           name : "skylark-domx-plugins-players",
+           location : "../node_modules/skylark-domx-plugins-players/dist/uncompressed/skylark-domx-plugins-players",
+            main: 'main'
+         },
+         {
            name : "skylark-devices-points",
            location : "../node_modules/skylark-devices-points/dist/uncompressed/skylark-devices-points",
             main: 'main'

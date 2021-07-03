@@ -1,0 +1,9 @@
+/**
+ * skylark-domx-plugins-groups - The skylark list plugin library.
+ * @author Hudaokeji, Inc.
+ * @version v0.9.0
+ * @link https://github.com/skylark-domx/skylark-domx-plugins-groups/
+ * @license MIT
+ */
+define(["skylark-langx/langx","skylark-langx-events","skylark-domx-eventer","skylark-domx-query","skylark-domx-styler","skylark-domx-plugins-interact/rotatable","skylark-domx-plugins-interact/scalable"],function(t,e,r,s,a,i,n){"use strict";return e.Emitter.inherit({options:{},_construct:function(t){this.carsouel=t,this.reset(),this._$threedContainer=t.$(`.${t.options.modes.rotate.classes.threedContainer}`),this._rotatable=new i(this._$threedContainer[0],{started:function(){},stopped:function(){}}),this._scalable=new n(this._$threedContainer[0],{radius:t.options.modes.rotate.radius,targets:t.getItems()}),this._start=0},reset:function(t){let e=this.carsouel.getItems();if(e){let t=this._itemsCount=e.length,s=this._deltaDeg=360/t;for(var r=0;r<t;r++)a.css(e[r],{transform:"rotateY("+r*s+"deg)"})}},jump:function(t,e){let s=this.carsouel;s.elmx(),s.options;var a=s.$(s.getActiveItem()),i=e||s.getItemForDirection(t,a),n=(s.interval,"next"==t?"left":"right");if(i.hasClass("active"))return s.moving=!1;let o=s.getItemIndex(i);var l=i[0],d=r.create("jumping.lark.carousel",{relatedTarget:l,direction:n});if(s.trigger(d),d.isDefaultPrevented())return;s.moving=!0,s._indicators&&s._indicators.setActiveIndicator(o);var c=r.create("jumped.lark.carousel",{relatedTarget:l,direction:n});return i.addClass(t),i.reflow(),a.addClass(n),i.addClass(n),s._$itemsContainer.one("transitionEnd",function(){i.removeClass([t,n].join(" ")).addClass("active"),a.removeClass(["active",n].join(" ")),s.moving=!1,setTimeout(function(){s.trigger(c)},0)}).css("transform","rotateY("+o*this._deltaDeg+"deg)").emulateTransitionEnd(),this}})});
+//# sourceMappingURL=../sourcemaps/_carousel/mode-rotate.js.map

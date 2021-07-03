@@ -8,13 +8,12 @@
   "./groups",
   "./group",
   "./_carousel/indicators",
-  "./_carousel/effect_slide"
-],function(langx,browser,eventer,$,elmx,plugins,groups,Group,Indicators,EffectSlide){
+  "./_carousel/mode-slide",
+  "./_carousel/mode-rotate",
+  "./_carousel/mode-coverflow"
+],function(langx,browser,eventer,$,elmx,plugins,groups,Group,Indicators,ModeSlide,ModeRotate,ModeCoverflow){
   'use strict'
 
-  var effects = {
-    "slide" : EffectSlide
-  };
  
   var Carousel = Group.inherit({
     klassName : "Carousel",
@@ -93,11 +92,11 @@
               // }],
             },
 
-            effect : "slide",
+            mode : "slide",
 
             startIndex : 0,
 
-            effects : {
+            modes : {
               slide : {
                 classes : {
                   base : "slide"
@@ -106,8 +105,10 @@
 
               rotate : {
                 classes : {
-                  base : "rotate"
-                }
+                  base : "rotate",
+                  threedContainer : "threed-container"
+                },
+                radius : 240
               },
 
               coverflow : {
@@ -179,7 +180,7 @@
                 eventer.stop(e);
             });
 
-            this._effect = new effects[this.options.effect](this);
+            this._mode = new modes[this.options.mode](this);
 
             if (this.options.data.items) {
                 this.addItems(this.options.data.items);
@@ -262,7 +263,7 @@
             if (this.moving) return this._$elm.one('jumped.lark.carousel', function() { that.jump(pos) }) // yes, "slid"
             if (activeIndex == pos)  return this.pause().cycle()
 
-            return this._effect.jump(pos > activeIndex ? 'next' : 'prev', this._$items.eq(pos))
+            return this._mode.jump(pos > activeIndex ? 'next' : 'prev', this._$items.eq(pos))
         },
 
         /*
@@ -294,7 +295,7 @@
             if (this.moving) {
               return
             }
-            return this._effect.jump('next')
+            return this._mode.jump('next')
         },
 
         /*
@@ -302,9 +303,16 @@
          */
         prev : function() {
            if (this.moving) return
-            return this._effect.jump('prev')
+            return this._mode.jump('prev')
         },
 
+        resetItems : function() {
+          Group.prototype.resetItems.call(this);
+
+          if (this._mode && this._mode.resetItems) {
+            this._mode.resetItems();
+          }
+        },
 
         addItems : function(items) {
             let index = this.getItemsCount();
@@ -334,6 +342,11 @@
         }
   });
 
+  var modes = Carousel.modes = {
+    "slide" : ModeSlide,
+    "rotate" : ModeRotate,
+    "coverflow" : ModeCoverflow
+  };
 
   plugins.register(Carousel);
 
