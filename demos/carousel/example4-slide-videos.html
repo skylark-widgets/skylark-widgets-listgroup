@@ -97,11 +97,20 @@ function initPage(langx,domx,groups) {
           item.altText = item.altText || item.title;
 
 
-          playingVideo = $("<div/>").plugin("lark.players.video",{
+          let player = $("<div/>").plugin("lark.players.video",{
             media : item
           })
 
-          return playingVideo.elm();
+
+          player.on("pause",function(){
+            playingVideo = null;
+          });
+
+          player.on("play",function(){
+            playingVideo = player;
+          });
+
+          return player.elm();
         }
 
       // Initialize the Gallery as image carousel:
