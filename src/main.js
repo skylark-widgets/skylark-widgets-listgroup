@@ -4,8 +4,7 @@ define([
     "./carousel",
     "./linear",
     "./sortable",
-    "./tiler",
-    "./tree"
+    "./tiler"
 ], function(groups) {
     return groups;
 });

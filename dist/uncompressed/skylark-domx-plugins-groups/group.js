@@ -64,16 +64,22 @@
 
             velm.on('click', itemSelector, function () {
                 var veItem = elmx(this);
-
-                if (self.options.item.selectable && !veItem.hasClass('disabled')) {
+                if (!veItem.hasClass('disabled')) {
                     let value = self.getItemValue(this);
-                    if (self.options.item.multiSelect) {
-                      self.toggleSelectOneItem(value);
-                    } else {
-                      self.clearSelectedItems();
-                      self.selectOneItem(value);
-                    }
+                    self.setActiveItem(value);
+
+                  if (self.options.item.selectable) {
+
+                      if (self.options.item.multiSelect) {
+                        self.toggleSelectOneItem(value);
+                      } else {
+                        self.clearSelectedItems();
+                        self.selectOneItem(value);
+                      }
+                  }
+
                 }
+
 
                 //veItem.blur();
                 return false;
@@ -102,7 +108,7 @@
           } else {
             $item = $(valueOrIdx);
           }
-          return $item;
+          return $item[0];
         },
 
         getItems : function() {
@@ -128,15 +134,15 @@
 
         
         isSelectedItem : function(valueOrIdx) {
-          return this.findItem(valueOrIdx).hasClass(this.options.item.classes.selected);
+          return $(this.findItem(valueOrIdx)).hasClass(this.options.item.classes.selected);
         },
                  
         selectOneItem : function (valueOrIdx) {
-          this.findItem(valueOrIdx).addClass(this.options.item.classes.selected);
+          $(this.findItem(valueOrIdx)).addClass(this.options.item.classes.selected);
         },
 
         unselectOneItem : function (valueOrIdx) {
-            this.findItem(valueOrIdx).removeClass(this.options.item.classes.selected);
+          $(this.findItem(valueOrIdx)).removeClass(this.options.item.classes.selected);
         },
 
         /*
@@ -163,6 +169,16 @@
           let activeClass = this.options.item.classes.active,
               $activeItem = this._$items.filter(`.${activeClass}`);
           return $activeItem[0] || null;
+        },
+
+        setActiveItem : function(valueOrIdx) {
+          let current = this.getActiveItem(),
+              next = this.findItem(valueOrIdx);
+          if (next != current) {
+            let activeClass = this.options.item.classes.active;
+            $(current).removeClass(activeClass);
+            $(next).addClass(activeClass);
+          }
         },
 
 

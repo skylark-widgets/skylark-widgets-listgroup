@@ -10,35 +10,22 @@
   'use strict'
 
   var Linear = Group.inherit({
-    klassName : "Tiler",
+    klassName : "Linear",
 
     pluginName : "lark.groups.linear",
 
     options: {
-       alignment: 'left',
-        infiniteScroll: false,
-        itemRendered: null,
-        noItemsHTML: 'no items found',
-        selectable: false,
-
-        template : '<ul class="clearfix repeater-linear" data-container="true" data-infinite="true" data-preserve="shallow"></ul>',
         item : {
-            template: '<li class="repeater-item"><img  src="{{ThumbnailImage}}" class="thumb"/><h4 class="title">{{name}}</h4></div>',
-            
+          selectable: true
         },
-
-        viewClass: "repeater-linear",
-        renderItem : null
+        data : {}
     },
 
     _construct: function (elm, options) {
       this.overrided(elm, options);
 
-      this._renderItem = langx.template(this.options.item.template);
-
-      for (var i=0;i<options.items.length;i++) {
-        var itemHtml = this._renderItem(options.items[i]);
-        this._velm.append($(itemHtml));
+      if (this.options.data.items) {
+          this.addItems(this.options.data.items);
       }
     }
 

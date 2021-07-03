@@ -1,0 +1,96 @@
+.flipster {
+  display: block;
+  overflow-x: hidden;
+  overflow-y: visible;
+  position: relative;
+}
+
+.flipster:focus {
+  outline: none;
+}
+
+.flipster__container,
+.flipster__item {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  position: relative;
+}
+
+.flipster__container {
+  display: block;
+  white-space: nowrap;
+  word-spacing: -0.25em;
+  -webkit-transform-origin: 50% 50%;
+      -ms-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
+.flipster__item {
+  display: inline-block;
+  white-space: normal;
+  word-spacing: normal;
+  vertical-align: bottom;
+}
+
+.flipster--click .flipster__item--past,
+.flipster--click .flipster__item--future {
+  cursor: pointer;
+}
+
+.flipster__item img {
+  max-width: 100%;
+}
+/* @end */
+
+
+/* @group Flipster Coverflow Theme */
+.flipster--coverflow .flipster__container,
+.flipster--coverflow .flipster__item,
+.flipster--coverflow .flipster__item__content {
+  -webkit-transition: all 350ms ease-in-out;
+  -o-transition: all 350ms ease-in-out;
+  transition: all 350ms ease-in-out;
+  -webkit-transition-timing-function: cubic-bezier(0.56, 0.12, 0.12, 0.98);
+       -o-transition-timing-function: cubic-bezier(0.56, 0.12, 0.12, 0.98);
+          transition-timing-function: cubic-bezier(0.56, 0.12, 0.12, 0.98);
+}
+.flipster--coverflow .flipster__item {
+  -webkit-perspective: 800px;
+          perspective: 800px;
+}
+.flipster--coverflow .flipster__container {
+  padding-bottom: 5%;
+}
+.flipster--coverflow .flipster__item__content {
+  -webkit-transform-origin: 50% 100%;
+      -ms-transform-origin: 50% 100%;
+          transform-origin: 50% 100%;
+  box-reflect: below 0 -webkit-gradient(linear, left bottom, left top, color-stop(0.05, rgba(255, 255, 255, 0.12)), color-stop(0.2, transparent));
+  -webkit-box-reflect: below 0 -webkit-gradient(linear, left bottom, left top, color-stop(0.05, rgba(255, 255, 255, 0.12)), color-stop(0.2, transparent));
+}
+.flipster--coverflow .flipster__item__content img:only-child {
+  display: block;
+}
+.flipster--coverflow .flipster__item--past .flipster__item__content {
+  -webkit-transform-origin: 0% 50%;
+      -ms-transform-origin: 0% 50%;
+          transform-origin: 0% 50%;
+  -webkit-transform: scale(0.75) rotateY(55deg);
+          transform: scale(0.75) rotateY(55deg);
+}
+.flipster--coverflow .flipster__item--future .flipster__item__content {
+  -webkit-transform-origin: 100% 50%;
+      -ms-transform-origin: 100% 50%;
+          transform-origin: 100% 50%;
+  -webkit-transform: scale(0.75) rotateY(-55deg);
+          transform: scale(0.75) rotateY(-55deg);
+}
+.flipster--coverflow .flip-current .flipster__item__content {
+  -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+}
+/* @end */
+
