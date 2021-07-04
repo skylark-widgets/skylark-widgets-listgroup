@@ -1,20 +1,66 @@
 <!doctype html>
-<html class="no-js">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Coverflow Carousel Demo</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=550, initial-scale=1">
+<html lang="en">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width,user-scalable=no">
+    <title>3D Carousel</title>
+    <link rel="stylesheet" href="../../skins/default/carousel.css">
+    <link rel="stylesheet" href="../../skins/default/carousel-coverflow.css">
+  <link rel="stylesheet" href="../../skins/default/indicators.css">
 
-    <link rel="stylesheet" href="demo.css">
-    <link rel="stylesheet" href="../skins/default/flipster.css">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
 
-    <script src="../dist/uncompressed/skylark-flipster-all.js"></script>
-    <script>
-             var $ = skylarkjs.domx.query;
-    </script>
-</head>
+      html,
+      body {
+        height: 100%;
+        /* for touch screen */
+        touch-action: none;
+      }
+
+      body {
+        overflow: hidden;
+        background: #111;
+
+      }
+
+      #carousel1 {
+
+        display: block;
+        overflow-x: hidden;
+        overflow-y: visible;
+        position: relative;
+            margin: 0 -2em;
+
+      }
+
+    .lark-carousel.coverflow {
+      display: block;
+      overflow-x: hidden;
+      overflow-y: visible;
+      position: relative;
+    }
+
+    .lark-carousel.coverflow:focus {
+      outline: none;
+    }
+
+
+     .lark-carousel.coverflow .items > .item img {
+          max-width: 100%;
+     }      
+
+     .lark-carousel.coverflow .items > .item .content img:only-child {
+        display: block;
+     }
+    </style>
+    <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
+
+  </head>
+
 <body>
 <header class="main-header">
     <h1> Coverflow Carsousel/h1>
@@ -25,62 +71,56 @@
 
     <h2>Flipster Carousel</h2>
 
-    <div id="carousel">
-        <ul class="flip-items">
-            <li data-flip-title="Red">
-                <img src="img/text1.gif">
+    <div id="carousel" class="lark-carousel coverflow coverflow2">
+        <ul class="items">
+            <li data-flip-title="Red" class="item">
+                <img src="../assets/images/coverflow/text1.gif">
             </li>
-            <li data-flip-title="Razzmatazz" data-flip-category="Purples">
-                <img src="img/text2.gif">
+            <li data-flip-title="Razzmatazz"  class="item" data-flip-category="Purples">
+                <img src="../assets/images/coverflow/text2.gif">
              </li>
-            <li data-flip-title="Deep Lilac" data-flip-category="Purples">
-                <img src="img/text3.gif">
+            <li data-flip-title="Deep Lilac"  class="item" data-flip-category="Purples">
+                <img src="../assets/images/coverflow/text3.gif">
             </li>
-            <li data-flip-title="Daisy Bush" data-flip-category="Purples">
-                <img src="img/text4.gif">
+            <li data-flip-title="Daisy Bush" class="item" data-flip-category="Purples">
+                <img src="../assets/images/coverflow/text4.gif">
             </li>
-            <li data-flip-title="Cerulean Blue" data-flip-category="Blues">
-                <img src="img/text5.gif">
+            <li data-flip-title="Cerulean Blue" class="item" data-flip-category="Blues">
+                <img src="../assets/images/coverflow/text5.gif"> 
             </li>
-            <li data-flip-title="Dodger Blue" data-flip-category="Blues">
-                <img src="img/text6.gif">
+            <li data-flip-title="Dodger Blue" class="item" data-flip-category="Blues">
+                <img src="../assets/images/coverflow/text6.gif">
             </li>
-            <li data-flip-title="Cyan" data-flip-category="Blues">
-                <img src="img/text7.gif">
+            <li data-flip-title="Cyan"  class="item" data-flip-category="Blues">
+                <img src="../assets/images/coverflow/text7.gif">
             </li>
-            <li data-flip-title="Robin's Egg" data-flip-category="Blues">
-                <img src="img/text8.gif">
+            <li data-flip-title="Robin's Egg" class="item" data-flip-category="Blues">
+                <img src="../assets/images/coverflow/text8.gif">
             </li>
-            <li data-flip-title="Deep Sea" data-flip-category="Greens">
-                <img src="img/text9.gif">
+            <li data-flip-title="Deep Sea"  class="item" data-flip-category="Greens">
+                <img src="../assets/images/coverflow/text9.gif">
             </li>
-            <li data-flip-title="Apple" data-flip-category="Greens">
-                <img src="img/text10.gif">
-            </li>
-            <li data-flip-title="Pistachio" data-flip-category="Greens">
-                <img src="img/text11.gif">
-            </li>
-            <li data-flip-title="Pear" data-flip-category="Greens">
-                <img src="img/text12.gif">
-            </li>
-            <li data-flip-title="Bright Sun" data-flip-category="Yellows">
-                <img src="img/text13.gif">
-            </li>
-            <li data-flip-title="Mikado" data-flip-category="Yellows">
-                <img src="img/text14.gif">
-            </li>
+
         </ul>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
     </div>
 
-<script>
-    var carousel = $("#carousel").flipster({
-        style: 'carousel',
-        spacing: -0.5,
-        nav: true,
-        buttons:   true,
-    });
-</script>
+<script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
 
+<script>
+      var initPage = function(langx,domx) {
+        var $ = domx.query;
+        $('#carousel').plugin("lark.groups.carousel",{
+            mode : "coverflow",
+            start : "center",
+            cycle : {
+                interval : 0
+            }
+        }); 
+
+    };
+</script>
 <pre class="code">$("#carousel").flipster({
     style: 'carousel',
     spacing: -0.5,

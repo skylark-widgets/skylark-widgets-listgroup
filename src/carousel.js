@@ -42,8 +42,10 @@
               // If a positive number, Carousel will automatically advance to next item after that number of milliseconds
               interval: 5000,
 
-              pause: 'hover'        
+              pause: 'hover',
             },
+
+            loop : true,
 
             wrap: true,
             keyboard: true,
@@ -94,7 +96,7 @@
 
             mode : "slide",
 
-            startIndex : 0,
+            //start : "center", //ex:0
 
             modes : {
               slide : {
@@ -113,8 +115,13 @@
 
               coverflow : {
                 classes : {
-                  base : "coverflow"
-                }
+                  base : "coverflow",
+                  itemPast : "past",
+                  itemFuture : "future",
+                  itemCurrent : "current",
+                  itemContent : "content"
+                },
+                spacing :-0.6
               }
             },
 
@@ -141,8 +148,6 @@
               },this.options.indicators));
               this._indicators.setActiveIndicator(0);
             }
-
-
 
             this.paused = null;
             this.moving = null;
@@ -184,7 +189,15 @@
 
             if (this.options.data.items) {
                 this.addItems(this.options.data.items);
-                this.jump(this.options.startIndex)
+            }
+
+            let startIndex = this.options.start;
+            if (startIndex !== undefined) {
+              if (startIndex === 'center' ) {
+                startIndex = Math.floor(this.getItemsCount() / 2)
+              } 
+
+              this.jump(startIndex)              
             }
 
             if (this.options.onjumped) {
@@ -249,9 +262,98 @@
             return this._$items.eq(itemIndex);
         },
 
+        setActiveItem : function(toIndex) {
+            Group.prototype.setActiveItem.call(this,toIndex);
+
+            if (this._indicators) {
+              this._indicators.setActiveIndicator(toIndex);
+            }  
+        },
+
+        jump : function (to) {
+          if (this.jumping) {
+            return
+          }
+
+          let itemsCount = this.getItemsCount();
+          if (itemsCount<=1) {
+            return;
+          } 
+
+          let currentItem = this.getActiveItem(),
+              currentIndex = currentItem ? this.getItemIndex(currentItem) : -1,
+              toItem,
+              toIndex,
+              type;
+
+          if (to === 'prev') {
+              type = to;
+              if (currentIndex > 0 ) { 
+                toIndex = currentIndex -1; 
+              } else if ( this.options.loop ) { 
+                toIndex = itemsCount - 1; 
+              }
+          } else if (to === 'next') {
+              type = to;
+              if ( currentIndex < itemsCount - 1 ) { 
+                toIndex = currentIndex + 1; 
+              } else if ( this.options.loop ) { 
+                toIndex = 0; 
+              }
+          } else if (typeof to === 'number') {
+              toIndex = to;
+          } else if ( to !== undefined ) {
+              // if object is sent, get its index
+              toIndex = this.getItmIndex(to);
+          }
+
+          if (toIndex<0 || toIndex==currentIndex) {
+            return;
+          }
+
+          if (!type) {
+            type = toIndex > currentIndex ? 'next' : 'prev';
+          }
+
+          this.jumping =true;
+
+          var jumpingEvent = eventer.create('jumping.lark.carousel', {
+              toIndex,
+              currentIndex,
+              type
+          });
+
+          this.trigger(jumpingEvent);
+          if (jumpingEvent.isDefaultPrevented()) {
+            this.jumping =false;
+            return;
+          }
+
+
+          return this._mode.jump(toIndex,currentIndex,type,() => {
+            //    $next.removeClass([type, direction].join(' ')).addClass('active')
+            //    $active.removeClass(['active', direction].join(' '))
+            this.setActiveItem(toIndex);
+
+            var jumpedEvent = eventer.create('jumped.lark.carousel', { 
+              toIndex,
+              currentIndex,
+              type
+            });
+
+            setTimeout(()=> {
+              this.trigger(jumpedEvent)
+            }, 0)
+
+
+            this.jumping  = false;
+
+          });
+ 
+        },
+
         /*
          *Cycles the carousel to a particular frame (0 based, similar to an array). Returns to the caller before the target item has been shown
-         */
         jump : function(pos) {
             var that = this;
 
@@ -265,6 +367,7 @@
 
             return this._mode.jump(pos > activeIndex ? 'next' : 'prev', this._$items.eq(pos))
         },
+         */
 
         /*
          * Stops the carousel from cycling through items.
@@ -292,18 +395,14 @@
          * Cycles to the next item. Returns to the caller before the next item has been shown
          */
         next : function() {
-            if (this.moving) {
-              return
-            }
-            return this._mode.jump('next')
+            return this.jump('next')
         },
 
         /*
          * Cycles to the previous item. Returns to the caller before the previous item has been shown.
          */
         prev : function() {
-           if (this.moving) return
-            return this._mode.jump('prev')
+            return this.jump('prev')
         },
 
         resetItems : function() {

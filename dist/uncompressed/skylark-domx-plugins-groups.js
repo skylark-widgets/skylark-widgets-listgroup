@@ -422,31 +422,19 @@ define('skylark-domx-plugins-groups/groups',[
     	this.carsouel = carsouel;
     },
 
-    jump : function(type, next) {
+    jump : function(toIndex,currentIndex,type,ended) {
     	let carsouel = this.carsouel,
     		velm = carsouel.elmx(),
-    		options = carsouel.options
+    		options = carsouel.options,
 
-        var $active =  carsouel.$(carsouel.getActiveItem()),
-        	$next = next || carsouel.getItemForDirection(type, $active),
+            $active =  carsouel.$(carsouel.findItem(currentIndex)),
+        	$next = carsouel.$(carsouel.findItem(toIndex)),
         	isCycling = carsouel.interval,
         	direction = type == 'next' ? 'left' : 'right';
 
-        if ($next.hasClass('active')) {
-        	return (carsouel.moving = false)
-        }
-
-        var relatedTarget = $next[0];
-
-        var movingEvent = eventer.create('jumping.lark.carousel', {
-            relatedTarget: relatedTarget,
-            direction: direction
-        });
-
-        carsouel.trigger(movingEvent);
-        if (movingEvent.isDefaultPrevented()) return
-
-        carsouel.moving = true;
+        ///if ($next.hasClass('active')) {
+        ///	return (carsouel.moving = false)
+        ///}
 
         isCycling && carsouel.pause();
 
@@ -457,11 +445,6 @@ define('skylark-domx-plugins-groups/groups',[
             $nextIndicator && $nextIndicator.addClass('active');
         }
         */
-        if (carsouel._indicators) {
-            carsouel._indicators.setActiveIndicator(carsouel.getItemIndex($next));
-        }
-
-        var movedEvent = eventer.create('jumped.lark.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
 
         $next.addClass(type);
         $next.reflow(); // [0].offsetWidth; // force reflow
@@ -469,12 +452,11 @@ define('skylark-domx-plugins-groups/groups',[
         $next.addClass(direction);
         $next
             .one('transitionEnd', function() {
-                $next.removeClass([type, direction].join(' ')).addClass('active')
-                $active.removeClass(['active', direction].join(' '))
-                carsouel.moving = false
-                setTimeout(function() {
-                    carsouel.trigger(movedEvent)
-                }, 0)
+                ///$next.removeClass([type, direction].join(' ')).addClass('active')
+                ///$active.removeClass(['active', direction].join(' '))
+                $next.removeClass([type, direction].join(' '));
+                $active.removeClass(direction);
+                ended();
             })
             .emulateTransitionEnd();
 
@@ -545,75 +527,30 @@ define('skylark-domx-plugins-groups/groups',[
 		    	});
 		    }    		
     	}
-
-
     },
 
-    jump : function(type, next) {
-    	let carsouel = this.carsouel,
-    		velm = carsouel.elmx(),
-    		options = carsouel.options
+    jump : function(toIndex,currentIndex,type,ended) {
+        let carsouel = this.carsouel,
+            velm = carsouel.elmx(),
+            options = carsouel.options,
 
-        var $active =  carsouel.$(carsouel.getActiveItem()),
-        	$next = next || carsouel.getItemForDirection(type, $active),
-        	isCycling = carsouel.interval,
-        	direction = type == 'next' ? 'left' : 'right';
-
-        if ($next.hasClass('active')) {
-        	return (carsouel.moving = false)
-        }
-
-        let nextIndex = carsouel.getItemIndex($next);
-
-        var relatedTarget = $next[0];
-
-        var movingEvent = eventer.create('jumping.lark.carousel', {
-            relatedTarget: relatedTarget,
-            direction: direction
-        });
-
-        carsouel.trigger(movingEvent);
-        if (movingEvent.isDefaultPrevented()) return
-
-        carsouel.moving = true;
-
-        ///isCycling && carsouel.pause();
-
-        /*
-        if (this._$indicators.length) {
-            this._$indicators.find('.active').removeClass('active');
-            var $nextIndicator = $(this._$indicators.children()[this.getItemIndex($next)]);
-            $nextIndicator && $nextIndicator.addClass('active');
-        }
-        */
-        if (carsouel._indicators) {
-            carsouel._indicators.setActiveIndicator(nextIndex);
-        }
-
-        var movedEvent = eventer.create('jumped.lark.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
+            $active =  carsouel.$(carsouel.findItem(currentIndex)),
+            $next = carsouel.$(carsouel.findItem(toIndex));
 
         $next.addClass(type);
         $next.reflow(); // [0].offsetWidth; // force reflow
-        $active.addClass(direction);
-        $next.addClass(direction);
 
         let $itemsContainer = carsouel._$itemsContainer;
 
         $itemsContainer
             .one('transitionEnd', function() {
-                $next.removeClass([type, direction].join(' ')).addClass('active')
-                $active.removeClass(['active', direction].join(' '))
-                carsouel.moving = false
-                setTimeout(function() {
-                    carsouel.trigger(movedEvent)
-                }, 0)
+                $next.removeClass(type);
+                ended();
             })
-            .css("transform","rotateY(" + (nextIndex * this._deltaDeg) + "deg)")
+            .css("transform","rotateY(" + (toIndex * this._deltaDeg) + "deg)")
             .emulateTransitionEnd();
 
-        //isCycling && carsouel.cycle();
-
-        return this
+        return this;
     }
 
 
@@ -634,7 +571,145 @@ define('skylark-domx-plugins-groups/groups',[
 
 
     _construct : function(carsouel) {
+    	this.carsouel = carsouel;
 
+    	this._itemOffsets = [];
+    	this._currentIndex = -1;
+
+    	let classes = this.carsouel.options.modes.coverflow.classes;
+
+        this._classRemover = new RegExp('\\b(' + classes.itemCurrent + '|' + classes.itemPast + '|' + classes.itemFuture + ')(.*?)(\\s|$)', 'g');
+        this._whiteSpaceRemover = new RegExp('\\s\\s+', 'g');
+
+    	this.reset();
+    },
+
+
+
+
+    reset : function (skipTransition) {
+    	let classes = this.carsouel.options.modes.coverflow.classes,
+    		$itemsContainer = this.carsouel._$itemsContainer,
+    		$items = this.carsouel.getItems(),
+    		spacing = this.carsouel.options.modes.coverflow.spacing;
+
+
+
+        function noTransition() {
+            $itemsContainer.css('transition', 'none');
+            $items.css('transition', 'none');
+        }
+
+        function resetTransition() {
+            $itemsContainer.css('transition', '');
+            $items.css('transition', '');
+        }
+
+	    function calculateBiggestItemHeight() {
+	        var biggestHeight = 0,
+	            itemHeight;
+
+	        $items.each(function() {
+	            itemHeight = $(this).height();
+	            if ( itemHeight > biggestHeight ) { biggestHeight = itemHeight; }
+	        });
+	        return biggestHeight;
+	    }
+
+        if ( skipTransition ) { 
+        	noTransition(); 
+        }
+
+        this._itemOffsets = [];
+
+        let containerWidth = $itemsContainer.width();
+        $itemsContainer.height(calculateBiggestItemHeight());
+
+        $items.each((i,item) => {
+            var $item = $(item),
+                width,
+                left;
+
+            $item.attr('class', function(i, c) {
+                return c && c.replace(this._classRemover, '').replace(this._whiteSpaceRemover, ' ');
+            });
+
+            width = $item.outerWidth();
+
+            if ( spacing !== 0 ) {
+                $item.css('margin-right', ( width * spacing ) + 'px');
+            }
+
+            left = $item.position().left;
+            this._itemOffsets[i] = -1 * ((left + (width / 2)) - (containerWidth / 2));
+
+            if ( !$item.children('.' + classes.itemContent ).length) {
+                $item.wrapInner('<div class="' + classes.itemContent + '" />');
+            }
+        });
+
+        if (this._currentIndex>=0) {
+	        this.center();
+        }
+        if ( skipTransition ) { 
+        	setTimeout(resetTransition, 1); 
+        }
+    },
+
+    center : function (currentIndex) {
+    	if (currentIndex !== undefined) {
+	        this._currentIndex = currentIndex;
+    	} else {
+    		currentIndex = this._currentIndex;
+    	}
+    	if (currentIndex>=0)  {
+	        var classes = this.carsouel.options.modes.coverflow.classes,
+	        	$itemsContainer = this.carsouel._$itemsContainer,
+	        	$items =  this.carsouel.getItems(),
+	        	total = $items.length;
+	        var $item;
+	        var newClass;
+	        var zIndex;
+
+	        $items.each((i,item) => {
+	            $item = $(item);
+	            newClass = ' ';
+
+	            if (i === currentIndex)  {
+	                newClass += classes.itemCurrent;
+	                zIndex = (total + 1);
+	            }
+	            else if (i < currentIndex) {
+	                newClass += classes.itemPast + ' ' +
+	                    classes.itemPast + '-' + (currentIndex - i);
+	                zIndex = total - (currentIndex - i);
+	            } else  {
+	                newClass += classes.itemFuture + ' ' +
+	                    classes.itemFuture + '-' + (i - currentIndex);
+	                
+	                zIndex = total -  (i - currentIndex);
+	            }
+
+	            $item.css('z-index', zIndex )
+	              .attr('class',(i, c) => {
+	                return c && c.replace(this._classRemover, '').replace(this._whiteSpaceRemover,' ') + newClass;
+	              });
+	        });
+
+	        $itemsContainer.css('transform', 'translateX(' + this._itemOffsets[currentIndex] + 'px)');
+    	}
+    },
+
+    jump : function(toIndex,currentIndex,type,ended) {
+        var $itemsContainer = this.carsouel._$itemsContainer;
+        this.center(toIndex);
+        $itemsContainer
+            .one('transitionEnd', function() {
+                ended();
+            })
+            .emulateTransitionEnd();
+
+        return this;
     }
 
   });
@@ -686,8 +761,10 @@ define('skylark-domx-plugins-groups/groups',[
               // If a positive number, Carousel will automatically advance to next item after that number of milliseconds
               interval: 5000,
 
-              pause: 'hover'        
+              pause: 'hover',
             },
+
+            loop : true,
 
             wrap: true,
             keyboard: true,
@@ -738,7 +815,7 @@ define('skylark-domx-plugins-groups/groups',[
 
             mode : "slide",
 
-            startIndex : 0,
+            //start : "center", //ex:0
 
             modes : {
               slide : {
@@ -757,8 +834,13 @@ define('skylark-domx-plugins-groups/groups',[
 
               coverflow : {
                 classes : {
-                  base : "coverflow"
-                }
+                  base : "coverflow",
+                  itemPast : "past",
+                  itemFuture : "future",
+                  itemCurrent : "current",
+                  itemContent : "content"
+                },
+                spacing :-0.6
               }
             },
 
@@ -785,8 +867,6 @@ define('skylark-domx-plugins-groups/groups',[
               },this.options.indicators));
               this._indicators.setActiveIndicator(0);
             }
-
-
 
             this.paused = null;
             this.moving = null;
@@ -828,7 +908,15 @@ define('skylark-domx-plugins-groups/groups',[
 
             if (this.options.data.items) {
                 this.addItems(this.options.data.items);
-                this.jump(this.options.startIndex)
+            }
+
+            let startIndex = this.options.start;
+            if (startIndex !== undefined) {
+              if (startIndex === 'center' ) {
+                startIndex = Math.floor(this.getItemsCount() / 2)
+              } 
+
+              this.jump(startIndex)              
             }
 
             if (this.options.onjumped) {
@@ -893,9 +981,98 @@ define('skylark-domx-plugins-groups/groups',[
             return this._$items.eq(itemIndex);
         },
 
+        setActiveItem : function(toIndex) {
+            Group.prototype.setActiveItem.call(this,toIndex);
+
+            if (this._indicators) {
+              this._indicators.setActiveIndicator(toIndex);
+            }  
+        },
+
+        jump : function (to) {
+          if (this.jumping) {
+            return
+          }
+
+          let itemsCount = this.getItemsCount();
+          if (itemsCount<=1) {
+            return;
+          } 
+
+          let currentItem = this.getActiveItem(),
+              currentIndex = currentItem ? this.getItemIndex(currentItem) : -1,
+              toItem,
+              toIndex,
+              type;
+
+          if (to === 'prev') {
+              type = to;
+              if (currentIndex > 0 ) { 
+                toIndex = currentIndex -1; 
+              } else if ( this.options.loop ) { 
+                toIndex = itemsCount - 1; 
+              }
+          } else if (to === 'next') {
+              type = to;
+              if ( currentIndex < itemsCount - 1 ) { 
+                toIndex = currentIndex + 1; 
+              } else if ( this.options.loop ) { 
+                toIndex = 0; 
+              }
+          } else if (typeof to === 'number') {
+              toIndex = to;
+          } else if ( to !== undefined ) {
+              // if object is sent, get its index
+              toIndex = this.getItmIndex(to);
+          }
+
+          if (toIndex<0 || toIndex==currentIndex) {
+            return;
+          }
+
+          if (!type) {
+            type = toIndex > currentIndex ? 'next' : 'prev';
+          }
+
+          this.jumping =true;
+
+          var jumpingEvent = eventer.create('jumping.lark.carousel', {
+              toIndex,
+              currentIndex,
+              type
+          });
+
+          this.trigger(jumpingEvent);
+          if (jumpingEvent.isDefaultPrevented()) {
+            this.jumping =false;
+            return;
+          }
+
+
+          return this._mode.jump(toIndex,currentIndex,type,() => {
+            //    $next.removeClass([type, direction].join(' ')).addClass('active')
+            //    $active.removeClass(['active', direction].join(' '))
+            this.setActiveItem(toIndex);
+
+            var jumpedEvent = eventer.create('jumped.lark.carousel', { 
+              toIndex,
+              currentIndex,
+              type
+            });
+
+            setTimeout(()=> {
+              this.trigger(jumpedEvent)
+            }, 0)
+
+
+            this.jumping  = false;
+
+          });
+ 
+        },
+
         /*
          *Cycles the carousel to a particular frame (0 based, similar to an array). Returns to the caller before the target item has been shown
-         */
         jump : function(pos) {
             var that = this;
 
@@ -909,6 +1086,7 @@ define('skylark-domx-plugins-groups/groups',[
 
             return this._mode.jump(pos > activeIndex ? 'next' : 'prev', this._$items.eq(pos))
         },
+         */
 
         /*
          * Stops the carousel from cycling through items.
@@ -936,18 +1114,14 @@ define('skylark-domx-plugins-groups/groups',[
          * Cycles to the next item. Returns to the caller before the next item has been shown
          */
         next : function() {
-            if (this.moving) {
-              return
-            }
-            return this._mode.jump('next')
+            return this.jump('next')
         },
 
         /*
          * Cycles to the previous item. Returns to the caller before the previous item has been shown.
          */
         prev : function() {
-           if (this.moving) return
-            return this._mode.jump('prev')
+            return this.jump('prev')
         },
 
         resetItems : function() {
