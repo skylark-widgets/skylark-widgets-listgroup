@@ -329,8 +329,7 @@
             return;
           }
 
-
-          return this._mode.jump(toIndex,currentIndex,type,() => {
+          this._mode.jump(toIndex,currentIndex,type,() => {
             //    $next.removeClass([type, direction].join(' ')).addClass('active')
             //    $active.removeClass(['active', direction].join(' '))
             this.setActiveItem(toIndex);
@@ -349,7 +348,8 @@
             this.jumping  = false;
 
           });
- 
+
+          return this;
         },
 
         /*

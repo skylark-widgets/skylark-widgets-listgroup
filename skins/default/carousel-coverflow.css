@@ -120,7 +120,7 @@
   -webkit-transform: translateX(100%) rotateY(-20deg) scale(0.5);
           transform: translateX(100%) rotateY(-20deg) scale(0.5);
 }
-.lark-carousel.coverflow2 .items > .item.past-2 .items > .item .content {
+.lark-carousel.coverflow2 .items > .item.past-2  .content {
   -webkit-transform: translateX(25%) rotateY(40deg) scale(0.65);
           transform: translateX(25%) rotateY(40deg) scale(0.65);
 }
