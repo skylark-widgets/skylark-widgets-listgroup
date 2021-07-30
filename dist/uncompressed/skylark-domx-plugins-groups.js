@@ -484,49 +484,53 @@ define('skylark-domx-plugins-groups/groups',[
 
   var ModeRotate = events.Emitter.inherit({
 
-  	options : {
+    options : {
 
-  	},
+    },
 
 
     _construct : function(carsouel) {
-    	this.carsouel = carsouel;
+      this.carsouel = carsouel;
 
-    	this.reset();
+      this.reset();
 
         this._$threedContainer = carsouel.$(`.${carsouel.options.modes.rotate.classes.threedContainer}`)
 
-    	this._rotatable = new Rotatable(this._$threedContainer[0],{
-		      started : function() {
-		          //playSpin(false);
-		      },
+      this._rotatable = new Rotatable(this._$threedContainer[0],{
+          starting : function(e) {
+            return $(e.target).closest(carsouel.options.item.selector).length==0;
+          },
 
-		      stopped : function() {
-		          //playSpin(true);
-		      }
-    	});
+          started : function() {
+              //playSpin(false);
+          },
 
-    	this._scalable = new Scalable(this._$threedContainer[0],{
-    		radius : carsouel.options.modes.rotate.radius,
-    		targets : carsouel.getItems()
-    	});
+          stopped : function() {
+              //playSpin(true);
+          }
+      });
 
-    	this._start = 0;
+      this._scalable = new Scalable(this._$threedContainer[0],{
+        radius : carsouel.options.modes.rotate.radius,
+        targets : carsouel.getItems()
+      });
+
+      this._start = 0;
 
     },
 
     reset : function(delayTime) {
-    	let items = this.carsouel.getItems();
-    	if (items) {
-    		let itemsCount = this._itemsCount = items.length,
-    			deltaDeg = this._deltaDeg = 360 / itemsCount;
+      let items = this.carsouel.getItems();
+      if (items) {
+        let itemsCount = this._itemsCount = items.length,
+          deltaDeg = this._deltaDeg = 360 / itemsCount;
 
-		    for (var i = 0; i < itemsCount; i++) {
-		    	styler.css(items[i],{
-		    		transform : "rotateY(" + (i * deltaDeg) + "deg)"
-		    	});
-		    }    		
-    	}
+        for (var i = 0; i < itemsCount; i++) {
+          styler.css(items[i],{
+            transform : "rotateY(" + (i * deltaDeg) + "deg)"
+          });
+        }       
+      }
     },
 
     jump : function(toIndex,currentIndex,type,ended) {
@@ -557,7 +561,7 @@ define('skylark-domx-plugins-groups/groups',[
   });
 
 
-  return ModeRotate;	
+  return ModeRotate;  
 });
  define('skylark-domx-plugins-groups/_carousel/mode-coverflow',[
   "skylark-langx/langx",
