@@ -1,6 +1,7 @@
 define([
-	"skylark-langx/skylark"
-],function(skylark){
-  'use strict'
-	return skylark.attach("domx.plugins.groups");
+    "skylark-domx-plugins-base/plugins"
+], function(plugins) {
+    'use strict';
+
+	return plugins.groups = {};
 });

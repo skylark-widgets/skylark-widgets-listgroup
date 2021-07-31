@@ -87,11 +87,13 @@
 })(function(define,require) {
 
 define('skylark-domx-plugins-groups/groups',[
-	"skylark-langx/skylark"
-],function(skylark){
-  'use strict'
-	return skylark.attach("domx.plugins.groups");
+    "skylark-domx-plugins-base/plugins"
+], function(plugins) {
+    'use strict';
+
+	return plugins.groups = {};
 });
+
  define('skylark-domx-plugins-groups/group',[
   "skylark-langx/langx",
   "skylark-domx-query",
