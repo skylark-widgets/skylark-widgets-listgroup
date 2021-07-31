@@ -20,11 +20,11 @@
         this._classRemover = new RegExp('\\b(' + classes.itemCurrent + '|' + classes.itemPast + '|' + classes.itemFuture + ')(.*?)(\\s|$)', 'g');
         this._whiteSpaceRemover = new RegExp('\\s\\s+', 'g');
 
-    	this.reset();
+    	this.resetItems();
     },
 
 
-    reset : function () {
+    resetItems : function () {
     	let classes = this.carsouel.options.modes.coverflow.classes,
     		$itemsContainer = this.carsouel._$itemsContainer,
     		$items = this.carsouel.getItems(),

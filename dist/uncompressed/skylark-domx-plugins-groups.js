@@ -494,9 +494,9 @@ define('skylark-domx-plugins-groups/groups',[
     _construct : function(carsouel) {
       this.carsouel = carsouel;
 
-      this.reset();
+      this.resetItems();
 
-        this._$threedContainer = carsouel.$(`.${carsouel.options.modes.rotate.classes.threedContainer}`)
+      this._$threedContainer = carsouel.$(`.${carsouel.options.modes.rotate.classes.threedContainer}`)
 
       this._rotatable = new Rotatable(this._$threedContainer[0],{
           starting : function(e) {
@@ -521,7 +521,7 @@ define('skylark-domx-plugins-groups/groups',[
 
     },
 
-    reset : function(delayTime) {
+    resetItems : function(delayTime) {
       let items = this.carsouel.getItems();
       if (items) {
         let itemsCount = this._itemsCount = items.length,
@@ -587,11 +587,11 @@ define('skylark-domx-plugins-groups/groups',[
         this._classRemover = new RegExp('\\b(' + classes.itemCurrent + '|' + classes.itemPast + '|' + classes.itemFuture + ')(.*?)(\\s|$)', 'g');
         this._whiteSpaceRemover = new RegExp('\\s\\s+', 'g');
 
-    	this.reset();
+    	this.resetItems();
     },
 
 
-    reset : function () {
+    resetItems : function () {
     	let classes = this.carsouel.options.modes.coverflow.classes,
     		$itemsContainer = this.carsouel._$itemsContainer,
     		$items = this.carsouel.getItems(),
@@ -912,11 +912,13 @@ define('skylark-domx-plugins-groups/groups',[
                 eventer.stop(e);
             });
 
-            this._mode = new modes[this.options.mode](this);
 
             if (this.options.data.items) {
                 this.addItems(this.options.data.items);
             }
+            
+            this._mode = new modes[this.options.mode](this);
+
 
             let startIndex = this.options.start;
             if (startIndex !== undefined) {

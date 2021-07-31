@@ -20,9 +20,9 @@
     _construct : function(carsouel) {
       this.carsouel = carsouel;
 
-      this.reset();
+      this.resetItems();
 
-        this._$threedContainer = carsouel.$(`.${carsouel.options.modes.rotate.classes.threedContainer}`)
+      this._$threedContainer = carsouel.$(`.${carsouel.options.modes.rotate.classes.threedContainer}`)
 
       this._rotatable = new Rotatable(this._$threedContainer[0],{
           starting : function(e) {
@@ -47,7 +47,7 @@
 
     },
 
-    reset : function(delayTime) {
+    resetItems : function(delayTime) {
       let items = this.carsouel.getItems();
       if (items) {
         let itemsCount = this._itemsCount = items.length,

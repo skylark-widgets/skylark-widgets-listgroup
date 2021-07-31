@@ -185,11 +185,13 @@
                 eventer.stop(e);
             });
 
-            this._mode = new modes[this.options.mode](this);
 
             if (this.options.data.items) {
                 this.addItems(this.options.data.items);
             }
+            
+            this._mode = new modes[this.options.mode](this);
+
 
             let startIndex = this.options.start;
             if (startIndex !== undefined) {
