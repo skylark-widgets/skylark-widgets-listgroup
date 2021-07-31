@@ -109,12 +109,21 @@ requirejs.config({
             main: 'main'
          },
          {
+           name : "skylark-langx-scripter",
+           location : "../node_modules/skylark-langx-scripter/dist/uncompressed/skylark-langx-scripter",
+            main: 'main'
+         },
+         {
            name : "skylark-langx",
            location : "../node_modules/skylark-langx/dist/uncompressed/skylark-langx",
             main: 'main'
          },
 
-
+         {
+           name : "skylark-domx-animates",
+           location : "../node_modules/skylark-domx-animates/dist/uncompressed/skylark-domx-animates",
+            main: 'main'
+         },
          {
            name : "skylark-domx-browser",
            location : "../node_modules/skylark-domx-browser/dist/uncompressed/skylark-domx-browser",
@@ -126,8 +135,8 @@ requirejs.config({
             main: 'main'
          },
          {
-           name : "skylark-domx-browser",
-           location : "../node_modules/skylark-domx-browser/dist/uncompressed/skylark-domx-browser",
+           name : "skylark-domx-transits",
+           location : "../node_modules/skylark-domx-transits/dist/uncompressed/skylark-domx-transits",
             main: 'main'
          },
          {
@@ -277,8 +286,7 @@ requirejs.config({
 });
  
 // require(["module/name", ...], function(params){ ... });
-require(["skylark-langx/langx","skylark-domx","skylark-bootstrap3/loadedInit"], function (langx,domx,bsInit) {
-    bsInit();
+require(["skylark-langx/langx","skylark-domx"], function (langx,domx) {
     require(["skylark-domx-plugins-groups"], function (groups) {
         if (window.initPage) {
             window.initPage(langx,domx,groups);
