@@ -300,11 +300,11 @@
               } else if ( this.options.loop ) { 
                 toIndex = 0; 
               }
-          } else if (typeof to === 'number') {
+          } else if (typeof to === 'number' || typeof to == 'string') {
               toIndex = to;
           } else if ( to !== undefined ) {
               // if object is sent, get its index
-              toIndex = this.getItmIndex(to);
+              toIndex = this.getItemIndex(to);
           }
 
           if (toIndex<0 || toIndex==currentIndex) {
