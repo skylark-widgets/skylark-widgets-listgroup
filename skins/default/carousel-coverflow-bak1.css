@@ -115,8 +115,8 @@
           transform: translateX(0%) scale(0.8);
 }
 .lark-carousel .item.current {
-  -webkit-transform: translateX(0) scale(1);
-          transform: translateX(0) scale(1);
+  -webkit-transform: translateX(0) rotateY(0deg) scale(1);
+          transform: translateX(0) rotateY(0deg) scale(1);
   -webkit-transition-delay: 60ms;
        -o-transition-delay: 60ms;
           transition-delay: 60ms;
@@ -130,13 +130,13 @@
 }
 
 .lark-carousel .item.past .content{
-  -webkit-transform: rotateY(-20deg);
-          transform: rotateY(-20deg);
+  -webkit-transform: translateX(100%) rotateY(-20deg);
+          transform: translateX(100%) rotateY(-20deg);
 }
 
 .lark-carousel .item.past-2  .content {
-  -webkit-transform: rotateY(40deg);
-          transform: rotateY(40deg);
+  -webkit-transform: translateX(25%) rotateY(40deg);
+          transform: translateX(25%) rotateY(40deg);
 }
 
 .lark-carousel .item.past-1  .content{
@@ -144,19 +144,51 @@
           transform: rotateY(45deg);
 }
 .lark-carousel .item.future  .content{
-  -webkit-transform: rotateY(20deg);
-          transform: rotateY(20deg);
+  -webkit-transform: translateX(-100%) rotateY(20deg);
+          transform: translateX(-100%) rotateY(20deg);
 }
 .lark-carousel .item.future-2  .content{
-  -webkit-transform: rotateY(-40deg);
-          transform: ) rotateY(-40deg);
+  -webkit-transform: translateX(-25%) rotateY(-40deg);
+          transform: translateX(-25%) rotateY(-40deg);
 }
 .lark-carousel .item.future-1  .content{
   -webkit-transform: rotateY(-45deg);
           transform: rotateY(-45deg);
 }
-
+.lark-carousel.no-rotate .item.past  .content{
+  -webkit-transform: translateX(175%);
+      -ms-transform: translateX(175%);
+          transform: translateX(175%);
+}
+.lark-carousel.no-rotate .item.past-2  .content{
+  -webkit-transform: translateX(25%);
+      -ms-transform: translateX(25%);
+          transform: translateX(25%);
+}
+.lark-carousel.no-rotate .item.past-1  .content{
+  -webkit-transform: translateX(0%);
+      -ms-transform: translateX(0%);
+          transform: translateX(0%);
+}
+.lark-carousel.no-rotate .item.future  .content{
+  -webkit-transform: translateX(-175%);
+      -ms-transform: translateX(-175%);
+          transform: translateX(-175%);
+}
+.lark-carousel.no-rotate .item.future-2  .content{
+  -webkit-transform: translateX(-25%);
+      -ms-transform: translateX(-25%);
+          transform: translateX(-25%);
+}
+.lark-carousel.no-rotate .item.future-1  .content{
+  -webkit-transform: translateX(0%);
+      -ms-transform: translateX(0%);
+          transform: translateX(0%);
+}
 .lark-carousel .item.current {
-  -webkit-transform: rotateY(0deg);
-          transform: rotateY(0deg);
+  -webkit-transform: translateX(0) rotateY(0deg) scale(1);
+          transform: translateX(0) rotateY(0deg) scale(1);
+  -webkit-transition-delay: 60ms;
+       -o-transition-delay: 60ms;
+          transition-delay: 60ms;
 }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no">
     <title>3D Carousel</title>
     <link rel="stylesheet" href="../../skins/default/carousel.css">
-    <link rel="stylesheet" href="../../skins/default/carousel-coverflow-old.css">
+    <link rel="stylesheet" href="../../skins/default/carousel-coverflow.css">
   <link rel="stylesheet" href="../../skins/default/indicators.css">
 
     <style>
@@ -159,7 +159,15 @@ h2 { font-size: 22px; }
         position: relative;
             margin: 0 -2em;
 
+        height : 400px;
+
       }
+
+
+     .lark-carousel.coverflow .item {
+          width: 300px;
+          height:  300px;
+     }      
 
      .lark-carousel.coverflow .item img {
           max-width: 100%;
@@ -205,50 +213,10 @@ h2 { font-size: 22px; }
     <h2>Flipster Carousel</h2>
 
     <div id="carousel" class="lark-carousel coverflow coverflow2">
+        <div>
         <ul class="items">
-            <li data-flip-title="Red" class="item">
-                <img src="../assets/images/coverflow/text1.gif">
-            </li>
-            <li data-flip-title="Razzmatazz"  class="item" data-flip-category="Purples">
-                <img src="../assets/images/coverflow/text2.gif">
-             </li>
-            <li data-flip-title="Deep Lilac"  class="item" data-flip-category="Purples">
-                <img src="../assets/images/coverflow/text3.gif">
-            </li>
-            <li data-flip-title="Daisy Bush" class="item" data-flip-category="Purples">
-                <img src="../assets/images/coverflow/text4.gif">
-            </li>
-            <li data-flip-title="Cerulean Blue" class="item" data-flip-category="Blues">
-                <img src="../assets/images/coverflow/text5.gif"> 
-            </li>
-            <li data-flip-title="Dodger Blue" class="item" data-flip-category="Blues">
-                <img src="../assets/images/coverflow/text6.gif">
-            </li>
-            <li data-flip-title="Cyan"  class="item" data-flip-category="Blues">
-                <img src="../assets/images/coverflow/text7.gif">
-            </li>
-            <li data-flip-title="Robin's Egg" class="item" data-flip-category="Blues">
-                <img src="../assets/images/coverflow/text8.gif">
-            </li>
-            <li data-flip-title="Deep Sea"  class="item" data-flip-category="Greens">
-                <img src="../assets/images/coverflow/text9.gif">
-            </li>
-            <li data-flip-title="Apple" class="item" data-flip-category="Greens">
-                <img src="../assets/images/coverflow/text10.gif">
-            </li>
-            <li data-flip-title="Pistachio" class="item" data-flip-category="Greens">
-                <img src="../assets/images/coverflow/text11.gif">
-            </li>
-            <li data-flip-title="Pear" class="item" data-flip-category="Greens">
-                <img src="../assets/images/coverflow/text12.gif">
-            </li>
-            <li data-flip-title="Bright Sun"  class="item" data-flip-category="Yellows">
-                <img src="../assets/images/coverflow/text13.gif">
-            </li>
-            <li data-flip-title="Mikado" class="item" data-flip-category="Yellows">
-                <img src="../assets/images/coverflow/text14.gif">
-            </li>
         </ul>
+        </div>
         <a class="prev">‹</a>
         <a class="next">›</a>
     </div>
@@ -258,9 +226,107 @@ h2 { font-size: 22px; }
 <script>
       var initPage = function(langx,domx) {
         var $ = domx.query;
+
+        var carouselLinks = [
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text1.gif",
+            title : "1"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text2.gif",
+            title : "2"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text3.gif",
+            title : "3"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text4.gif",
+            title : "4"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text5.gif",
+            title : "5"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text6.gif",
+            title : "6"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text7.gif",
+            title : "7"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text8.gif",
+            title : "8"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text9.gif",
+            title : "9"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text10.gif",
+            title : "10"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text11.gif",
+            title : "11"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text12.gif",
+            title : "12"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text13.gif",
+            title : "13"
+          },
+          {
+           type: 'image',
+
+            href : "../assets/images/coverflow/text14.gif",
+            title : "14"
+          },
+
+        ];
+
+
         $('#carousel').plugin("lark.groups.carousel",{
             mode : "coverflow",
             start : "center",
+
+
+        data : {
+          items: carouselLinks
+        },
+        item : {
+          template : `<li class="item"><div class="content"> <img alt="<%= title %>" src="<%= href %>"></div></li>`
+        },
             cycle : {
                 interval : 0
             },

@@ -80,6 +80,7 @@
         this._itemOffsets = [];
         let containerWidth = $itemsContainer.width();
         $itemsContainer.height(calculateBiggestItemHeight());
+        ///$itemsContainer.height("300px");
 
         $items.each((i,item) => {
             let $item = $(item),

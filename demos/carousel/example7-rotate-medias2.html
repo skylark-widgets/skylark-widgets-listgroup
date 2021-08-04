@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width,user-scalable=no">
     <title>3D Carousel</title>
     <link rel="stylesheet" href="../../skins/default/carousel.css">
+    <link rel="stylesheet" href="../../skins/default/carousel-slide.css">
+    <link rel="stylesheet" href="../../skins/default/carousel-coverflow.css">
     <link rel="stylesheet" href="../../skins/default/carousel-rotate.css">
     <link rel="stylesheet" href="../../skins/default/indicators.css">
 
@@ -28,6 +30,13 @@
 
       }
 
+      .item img {
+        height : 100%;
+        display: block;
+        margin: auto;
+      }
+
+
       #carousel1 {
           width : 680px;
           height : 380px;
@@ -40,6 +49,26 @@
           background: blue;
       }
 
+     .lark-carousel.coverflow .item img {
+          max-width: 100%;
+     }      
+
+     .lark-carousel.coverflow .item img {
+        display: block;
+        height : 120px;
+        width: 100px;
+     }
+
+    .lark-carousel.coverflow {
+          display: block;
+          overflow-x: hidden;
+          overflow-y: visible;
+          position: relative;
+    }
+
+    .lark-carousel.coverflow:focus {
+          outline: none;
+    }
 
     </style>
     <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
@@ -49,16 +78,17 @@
   <body>
 
     <div id="carousel1" class="lark-carousel rotate" >
-      <div id="drag-container" class="threed-container" style="width: 120px; height: 170px; ">
+      <div id="drag-container" class="items-container"">
 
-        <div id="spin-container" class= "items" style="width: 120px; height: 170px; ">         <!-- Add your images (or video) here -->
-        </div>
+        <ul id="spin-container" class= "items" ">         <!-- Add your images (or video) here -->
+        </ul>
         <!-- Text at center of ground -->
-        <p>3dMAX  Rotate  Carousel</p>
+        <p class="desc">3dMAX  Rotate  Carousel</p>
         <div id="ground" class="ground" style="width: 720px; height: 720px;"></div>
       </div>
       <a class="prev">‹</a>
       <a class="next">›</a>
+      <a class="cycle-stop"></a>
       <ol class="indicators">
       </ol>
 
@@ -199,7 +229,7 @@
       },
 
       item : {
-        template : `<img class="item" alt="<%= title %>" src="<%= href %>">`
+        template : `<li class="item"><div class="content"><img alt="<%= title %>" src="<%= href %>"></div></li>`
       }
   }); 
   }

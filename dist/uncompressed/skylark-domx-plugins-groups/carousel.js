@@ -108,7 +108,7 @@
               rotate : {
                 classes : {
                   base : "rotate",
-                  threedContainer : "threed-container"
+                  threedContainer : "items-container"
                 },
                 radius : 240
               },

@@ -647,6 +647,7 @@ define('skylark-domx-plugins-groups/groups',[
         this._itemOffsets = [];
         let containerWidth = $itemsContainer.width();
         $itemsContainer.height(calculateBiggestItemHeight());
+        ///$itemsContainer.height("300px");
 
         $items.each((i,item) => {
             let $item = $(item),
@@ -835,7 +836,7 @@ define('skylark-domx-plugins-groups/groups',[
               rotate : {
                 classes : {
                   base : "rotate",
-                  threedContainer : "threed-container"
+                  threedContainer : "items-container"
                 },
                 radius : 240
               },

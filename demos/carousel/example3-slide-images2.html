@@ -37,11 +37,13 @@
 <h2>Carousel image gallery</h2>
 <!-- The Gallery as inline carousel, can be positioned anywhere on the page -->
 <div id="image-carousel" class="lark-carousel slide" style="width:750px;height:450px;margin:1em auto">
-    <div class="items"></div>
+    <div class="items-container">
+      <ul class="items"></ul>
+    </div>
     <h3 class="title"></h3>
     <a class="prev">‹</a>
     <a class="next">›</a>
-    <a class="play-pause"></a>
+    <a class="cycle-stop"></a>
     <ol class="indicators"></ol>
 </div>
 
@@ -80,51 +82,7 @@ function initPage(langx,domx,groups) {
           title : "4"
         }
       ];
-      // Initialize the Gallery as image carousel:
-        function renderImageItem(item, callback) {
-            var type = item.type,
-                url = item.href,
-                title = item.title,
-                altText = item.altText || title;
-   
-            if (type) {
-                type = type.split('/')[0];
-            }
 
-            var that = this,
-                $img = $("<img/>"),
-                called,
-                img = $img[0];
-
-            function callbackWrapper(event) {
-                if (!called) {
-                    event = {
-                        type: event.type,
-                        target: img
-                    }
-
-                    called = true
-                    $img.off('load error', callbackWrapper);
-                    callback(event)
-                }
-            }
-
-
-            if (title) {
-                $img.attr("title",title);
-            }
-            if (altText) {
-                $img.attr("alt",altText);
-            }
-            $img.on('load error', callbackWrapper);
-            $img.attr("src",url);
-
-            $img.css({
-                "maxWidth" : "100%",
-                "maxHeight" : "100%"
-            });
-            return $img[0];
-        }
 
       $('#image-carousel').plugin("lark.groups.carousel",{
         mode : "slide",
@@ -132,12 +90,18 @@ function initPage(langx,domx,groups) {
         data : {
           items: carouselLinks
         },
-
-        ///renderItem : renderImageItem,
-
         item : {
-          template : `<div><img alt="<%= title %>" src="<%= href %>"></div>`
-        }
+          template : `<li class="item"><div class="content"> <img alt="<%= title %>" src="<%= href %>"></div></li>`
+        },
+
+      cycle : {
+        // [milliseconds]
+        // If a positive number, Carousel will automatically advance to next item after that number of milliseconds
+        interval: 1000,
+
+        pause: 'hover'        
+      }
+
       });
 
 
