@@ -394,6 +394,10 @@ define('skylark-domx-plugins-groups/groups',[
         this.$indicators = this.$indicators.add(indicator);
     },
 
+    clearIndicators : function() {
+       this.$indicators.remove();
+    },
+    
     setActiveIndicator: function (index) {
       if (this.$indicators) {
         let activeIndicatorClass = this.options.indicator.classes.active;
@@ -939,6 +943,34 @@ define('skylark-domx-plugins-groups/groups',[
             }
         },
 
+        changeMode : function(mode) {
+          if (mode == this.options.mode) {
+            return;
+          }
+
+          this.options.mode = mode;
+
+          if (this._mode && this._mode.dispose) {
+            this._mode.dispose();
+          }
+          this._mode = null;
+          this.clearItems();
+
+          this.$().removeClass("slide rotate coverflow").addClass(this.options.modes[mode].classes.base);
+
+          this.addItems(this.options.data.items);
+
+          this._mode = new modes[this.options.mode](this);
+
+          let startIndex = this.options.start;
+          if (startIndex !== undefined) {
+            if (startIndex === 'center' ) {
+              startIndex = Math.floor(this.getItemsCount() / 2)
+            } 
+            this.jump(startIndex)              
+          }
+        },
+
         keydown : function(e) {
             if (/input|textarea/i.test(e.target.tagName)) return
             switch (e.which) {
@@ -1167,7 +1199,14 @@ define('skylark-domx-plugins-groups/groups',[
           if (this._indicators) {
             this._indicators.addIndicator(index,itemData);
           }
+        },
 
+        clearItems : function() {
+          this._$items.remove();
+
+          if (this._indicators) {
+            this._indicators.clearIndicators();
+          }
         }
   });
 

@@ -76,6 +76,10 @@
         this.$indicators = this.$indicators.add(indicator);
     },
 
+    clearIndicators : function() {
+       this.$indicators.remove();
+    },
+    
     setActiveIndicator: function (index) {
       if (this.$indicators) {
         let activeIndicatorClass = this.options.indicator.classes.active;
