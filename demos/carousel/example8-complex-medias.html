@@ -77,6 +77,11 @@
         height : 360px;
         width: 300px;
      }
+     
+.lark-carousel.coverflow .item .content{
+  -webkit-perspective: 800px;
+          perspective: 800px;
+}
 
     </style>
     <script type="text/javascript" src="../require.js" data-main="../bootstrap.js"></script>
@@ -92,7 +97,7 @@
         </div>
 
     <div id="carousel1" class="lark-carousel rotate" >
-      <div id="drag-container" class="items-container"">
+      <div id="drag-container" class="items-container">
 
         <ul id="spin-container" class= "items" ">         <!-- Add your images (or video) here -->
         </ul>

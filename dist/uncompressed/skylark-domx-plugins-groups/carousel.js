@@ -225,6 +225,7 @@
           this.clearItems();
 
           this.$().removeClass("slide rotate coverflow").addClass(this.options.modes[mode].classes.base);
+          this.$items
 
           this.addItems(this.options.data.items);
 
@@ -330,8 +331,10 @@
               } else if ( this.options.loop ) { 
                 toIndex = 0; 
               }
-          } else if (typeof to === 'number' || typeof to == 'string') {
+          } else if (typeof to === 'number') {
               toIndex = to;
+          } else if ( typeof to == 'string') {
+              toIndex = parseInt(to);
           } else if ( to !== undefined ) {
               // if object is sent, get its index
               toIndex = this.getItemIndex(to);
@@ -470,7 +473,11 @@
         },
 
         clearItems : function() {
+          if (this._$itemsContainer) {
+            this._$itemsContainer.attr("style","");
+          }
           this._$items.remove();
+          this._$items = $();
 
           if (this._indicators) {
             this._indicators.clearIndicators();

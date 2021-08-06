@@ -1,4 +1,8 @@
 
+.lark-carousel.coverflow .items-container {
+  overflow: hidden;
+}
+
 .lark-carousel.coverflow .items  {
   display: block;
   white-space: nowrap;
